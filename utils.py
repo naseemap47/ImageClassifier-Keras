@@ -2,6 +2,8 @@ import cv2
 import numpy as np
 import os
 import glob
+from keras.preprocessing.image import ImageDataGenerator
+from keras.utils.np_utils import to_categorical
 
 
 def data_to_list(path_to_data):
@@ -22,3 +24,34 @@ def data_to_list(path_to_data):
     images = np.array(images)
     class_var = np.array(class_var)
     return images, class_var
+
+
+def create_generators(batch_size, no_class,
+                      x_train, y_train,
+                      x_val, y_val):
+    # to_categorical
+    y_train = to_categorical(y_train, no_class)
+    y_val = to_categorical(y_val, no_class)
+
+    # Preprocessor
+    train_preprocessor = ImageDataGenerator(
+        rescale=1 / 255,
+        rotation_range=10,
+        width_shift_range=0.1,
+        height_shift_range=0.1
+    )
+    val_preprocessor = ImageDataGenerator(rescale=1 / 255)
+
+    train_generators = train_preprocessor.flow(
+        x_train, y_train,
+        batch_size=batch_size,
+        shuffle=True
+    )
+    val_generators = val_preprocessor.flow(
+        x_val, y_val,
+        batch_size=batch_size,
+        shuffle=False
+    )
+
+    return train_generators, val_generators
+
