@@ -1,7 +1,7 @@
 from utils import data_to_list, create_generators
 from sklearn.model_selection import train_test_split
 from keras.callbacks import EarlyStopping
-from Model import Model
+from Models import custom_model
 import os
 import argparse
 
@@ -10,14 +10,13 @@ ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--dataset", type=str, required=True,
                 help="path to dataset/dir")
 ap.add_argument("-s", "--img_size", type=int, required=True,
-                help="Size of Image")
+                help="Size of Image used to train the model")
 ap.add_argument("-b", "--batch_size", type=int, default=32,
                 help="batch size of model training")
 ap.add_argument("-e", "--epochs", type=int, default=50,
                 help="epochs of model training")
 ap.add_argument("-m", "--model", type=str, required=True,
                 help="path to save model.h5")
-
 
 args = vars(ap.parse_args())
 path_to_dir = args["dataset"]
@@ -55,7 +54,7 @@ if os.path.isfile(model_path) is False:
 
     # Model
     print('[INFO] Model Training Started...')
-    model = Model(num_class, img_size)
+    model = custom_model(num_class, img_size)
     model.compile(
         optimizer='adam',
         loss='categorical_crossentropy',

@@ -1,9 +1,10 @@
+from keras.preprocessing.image import ImageDataGenerator
+from keras.utils.np_utils import to_categorical
 import cv2
 import numpy as np
 import os
 import glob
-from keras.preprocessing.image import ImageDataGenerator
-from keras.utils.np_utils import to_categorical
+
 
 
 def data_to_list(path_to_data, img_size):
@@ -14,9 +15,9 @@ def data_to_list(path_to_data, img_size):
     num_class = len(class_name_list)
 
     for class_name in class_name_list:
-        img_path_list = glob.glob(class_name + '/*.jpg') + \
-                        glob.glob(class_name + '/*.jpeg') + \
-                        glob.glob(class_name + '/*.png')
+        img_path_list = glob.glob(os.path.join(path_to_data, class_name) + '/*.jpg') + \
+                        glob.glob(os.path.join(path_to_data, class_name) + '/*.jpeg') + \
+                        glob.glob(os.path.join(path_to_data, class_name) + '/*.png')
         
         for img_path in img_path_list:
             img = cv2.imread(img_path)
@@ -31,7 +32,6 @@ def data_to_list(path_to_data, img_size):
 
     # class names to categorical
     class_var = np.unique(class_var, return_inverse=True)[1]
-    class_var = to_categorical(class_var)
 
     return images, class_var, num_class
 
