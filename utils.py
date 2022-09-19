@@ -28,6 +28,11 @@ def data_to_list(path_to_data, img_size):
 
     images = np.array(images)
     class_var = np.array(class_var)
+
+    # class names to categorical
+    class_var = np.unique(class_var, return_inverse=True)[1]
+    class_var = to_categorical(class_var)
+
     return images, class_var, num_class
 
 
