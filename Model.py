@@ -2,8 +2,8 @@ from keras import layers
 from keras import Model
 
 
-def Model(no_classes):
-    my_input = layers.Input(shape=(32, 32, 3))
+def Model(no_classes, img_size):
+    my_input = layers.Input(shape=(img_size, img_size, 3))
 
     x = layers.Conv2D(32, (3, 3), activation='relu')(my_input)
     x = layers.MaxPool2D()(x)
