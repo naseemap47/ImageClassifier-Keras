@@ -11,6 +11,7 @@ def data_to_list(path_to_data):
     class_var = []
     class_name_list = os.listdir(path_to_data)
     class_name_list = sorted(class_name_list)
+    num_class = len(class_name_list)
 
     for class_name in class_name_list:
         img_path_list = glob.glob(class_name + '/*.jpg') + \
@@ -23,7 +24,7 @@ def data_to_list(path_to_data):
             class_var.append(class_name)
     images = np.array(images)
     class_var = np.array(class_var)
-    return images, class_var
+    return images, class_var, num_class
 
 
 def create_generators(batch_size, no_class,
