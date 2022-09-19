@@ -32,15 +32,16 @@ if os.path.isfile(model_path) is False:
     print('[INFO] Image Data Extraction Completed...')
 
     # Split Data
-    x_train, x_val, y_train, y_val = train_test_split(img_list, class_list, test_size=0.2)
+    x_train, x_val, y_train, y_val = train_test_split(
+        img_list, class_list, test_size=0.2)
 
     # Preprocessing
     print('[INFO] Image Data Preprocessing Started...')
     train_generators, val_generators = create_generators(
-                                                        batch_size*2, num_class,
-                                                        x_train, y_train,
-                                                        x_val, y_val
-                                                    )
+        batch_size*2, num_class,
+        x_train, y_train,
+        x_val, y_val
+    )
     print('[INFO] Image Data Preprocessing Completed...')
 
     # Callbacks

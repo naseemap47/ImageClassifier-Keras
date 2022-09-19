@@ -6,7 +6,6 @@ import os
 import glob
 
 
-
 def data_to_list(path_to_data, img_size):
     images = []
     class_var = []
@@ -16,15 +15,15 @@ def data_to_list(path_to_data, img_size):
 
     for class_name in class_name_list:
         img_path_list = glob.glob(os.path.join(path_to_data, class_name) + '/*.jpg') + \
-                        glob.glob(os.path.join(path_to_data, class_name) + '/*.jpeg') + \
-                        glob.glob(os.path.join(path_to_data, class_name) + '/*.png')
-        
+            glob.glob(os.path.join(path_to_data, class_name) + '/*.jpeg') + \
+            glob.glob(os.path.join(path_to_data, class_name) + '/*.png')
+
         for img_path in img_path_list:
             img = cv2.imread(img_path)
             img = cv2.resize(img, (img_size, img_size))
             images.append(img)
             class_var.append(class_name)
-        
+
         print(f'[INFO] Extracted {class_name}')
 
     images = np.array(images)
@@ -64,4 +63,3 @@ def create_generators(batch_size, no_class,
     )
 
     return train_generators, val_generators
-
