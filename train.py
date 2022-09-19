@@ -9,6 +9,8 @@ import argparse
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--dataset", type=str, required=True,
                 help="path to dataset/dir")
+ap.add_argument("-s", "--img_size", type=int, required=True,
+                help="Size of Image")
 ap.add_argument("-b", "--batch_size", type=int, default=32,
                 help="batch size of model training")
 ap.add_argument("-e", "--epochs", type=int, default=50,
@@ -19,13 +21,14 @@ ap.add_argument("-m", "--model", type=str, required=True,
 
 args = vars(ap.parse_args())
 path_to_dir = args["dataset"]
+img_size = args['img_size']
 batch_size = args['batch_size']
 epochs = args['epochs']
 model_path = args['model']
 
 
 # All image data into a single list
-img_list, class_list, num_class = data_to_list(path_to_dir)
+img_list, class_list, num_class = data_to_list(path_to_dir, img_size)
 
 # Split Data
 x_train, x_val, y_train, y_val = train_test_split(img_list, class_list, test_size=0.2)
@@ -47,7 +50,7 @@ early_stopping = EarlyStopping(
 )
 
 # Model
-model = Model(no_classes=num_class)
+model = Model(num_class, img_size)
 model.compile(
     optimizer='adam',
     loss='categorical_crossentropy',

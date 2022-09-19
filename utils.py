@@ -6,7 +6,7 @@ from keras.preprocessing.image import ImageDataGenerator
 from keras.utils.np_utils import to_categorical
 
 
-def data_to_list(path_to_data):
+def data_to_list(path_to_data, img_size):
     images = []
     class_var = []
     class_name_list = os.listdir(path_to_data)
@@ -20,8 +20,12 @@ def data_to_list(path_to_data):
         
         for img_path in img_path_list:
             img = cv2.imread(img_path)
+            img = cv2.resize(img, (img_size, img_size))
             images.append(img)
             class_var.append(class_name)
+        
+        print(f'[INFO] Extracted {class_name}')
+
     images = np.array(images)
     class_var = np.array(class_var)
     return images, class_var, num_class
