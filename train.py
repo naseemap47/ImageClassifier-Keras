@@ -9,9 +9,7 @@ import argparse
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--dataset", type=str, required=True,
                 help="path to dataset/dir")
-ap.add_argument("-bg", "--batch_size_g", type=int, default=64,
-                help="batch size of data generator")
-ap.add_argument("-bt", "--batch_size_t", type=int, default=32,
+ap.add_argument("-b", "--batch_size", type=int, default=32,
                 help="batch size of model training")
 ap.add_argument("-e", "--epochs", type=int, default=50,
                 help="epochs of model training")
@@ -19,11 +17,9 @@ ap.add_argument("-m", "--model", type=str, required=True,
                 help="path to save model.h5")
 
 
-
 args = vars(ap.parse_args())
 path_to_dir = args["dataset"]
-batch_size_g = args['batch_size_g']
-batch_size_t = args['batch_size_t']
+batch_size = args['batch_size']
 epochs = args['epochs']
 model_path = args['model']
 
@@ -36,7 +32,7 @@ x_train, x_val, y_train, y_val = train_test_split(img_list, class_list, test_siz
 
 # Preprocessing
 train_generators, val_generators = create_generators(
-                                                    batch_size_g, num_class,
+                                                    batch_size*2, num_class,
                                                     x_train, y_train,
                                                     x_val, y_val
                                                 )
@@ -59,7 +55,7 @@ model.compile(
 )
 history = model.fit(
     train_generators,
-    batch_size=batch_size_t,
+    batch_size=batch_size,
     epochs=epochs,
     validation_data=val_generators,
     callbacks=[early_stopping]
