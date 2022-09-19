@@ -2,7 +2,7 @@ from keras import layers
 from keras import Model
 
 
-def Model(no_classes, img_size):
+def custom_model(no_classes, img_size):
     my_input = layers.Input(shape=(img_size, img_size, 3))
 
     x = layers.Conv2D(32, (3, 3), activation='relu')(my_input)
