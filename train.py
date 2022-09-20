@@ -17,7 +17,7 @@ ap.add_argument("-e", "--epochs", type=int, default=50,
                 help="epochs of model training")
 ap.add_argument("--model", type=str,  default='mobilenetV2',
                 choices=['custom', 'mobilenetV2'],
-                help="select model type convLSTM or LRCN")
+                help="select model type custom or mobilenetV2")
 ap.add_argument("--model_save", type=str, required=True,
                 help="path to save model.h5")
 
