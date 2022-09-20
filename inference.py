@@ -135,18 +135,21 @@ else:
             y3 = int(h/4)
             y4 = int(h/2.35)
 
-            cv2.putText(img_og, "CLASS: ", (20, 35),
-                        cv2.FONT_HERSHEY_PLAIN, 1.5,
-                        (255, 0, 255), 2, cv2.LINE_AA)
-            cv2.putText(img_og, "PROBABILITY: ", (20, 75),
-                        cv2.FONT_HERSHEY_PLAIN, 1.5,
-                        (255, 0, 255), 2, cv2.LINE_AA)
-            cv2.putText(img_og, str(predict), (120, 35),
-                        cv2.FONT_HERSHEY_PLAIN, 1.5,
-                        (0, 255, 0), 2, cv2.LINE_AA)
+            font_size = int(((h+w)/2)/224)
+            font_thickness = int(font_size*2)
+            
+            cv2.putText(img_og, "CLASS: ", (x_axis, y1),
+                        cv2.FONT_HERSHEY_PLAIN, font_size,
+                        (255, 0, 255), font_thickness, cv2.LINE_AA)
+            cv2.putText(img_og, "PROBABILITY: ", (x_axis, y2),
+                        cv2.FONT_HERSHEY_PLAIN, font_size,
+                        (255, 0, 255), font_thickness, cv2.LINE_AA)
+            cv2.putText(img_og, str(predict), (x_axis, y3),
+                        cv2.FONT_HERSHEY_PLAIN, font_size,
+                        (0, 255, 0), font_thickness, cv2.LINE_AA)
             cv2.putText(img_og, str(round(prob_value * 100, 2)) + "%",
-                        (180, 75), cv2.FONT_HERSHEY_PLAIN, 1.5,
-                        (0, 255, 0), 2, cv2.LINE_AA)
+                        (x_axis, y4), cv2.FONT_HERSHEY_PLAIN, font_size,
+                        (0, 255, 0), font_thickness, cv2.LINE_AA)
 
         # Write Video
         if save:
