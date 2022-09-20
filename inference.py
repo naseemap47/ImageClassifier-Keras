@@ -111,6 +111,7 @@ else:
         if not success:
             print('[ERROR] Failed to Read Video feed')
             break
+        h, w, _ = img_og.shape
         img_resize = cv2.resize(img_og, (img_size, img_size))
         img = img_resize.astype('float32') / 255
         img = tf.keras.preprocessing.image.img_to_array(img)
