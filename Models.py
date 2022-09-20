@@ -1,4 +1,4 @@
-from keras.applications import MobileNetV2
+import tensorflow as tf
 from keras import layers
 from keras import Model
 
@@ -25,20 +25,21 @@ def custom_model(no_classes, img_size):
     return Model(inputs=my_input, outputs=x)
 
 
-def mobilenet_v2_model(no_classes, img_size=224):
-    input_tensor = layers.Input(shape=(img_size, img_size, 3))
+def mobilenet_v2_model(no_class):
 
-    base_model = MobileNetV2(
-        input_tensor==input_tensor,
-        weights="imagenet",
-        input_shape=(img_size, img_size, 3),
-        classes=no_classes,
-        classifier_activation="softmax"
-    )
+    # Mobilenet V2
+    model = tf.keras.applications.MobileNetV2()
 
-    x = base_model.output
-    x = layers.Dense(1024, activation='relu')(x)
-    predictions = layers.Dense(no_classes, activation='softmax')(x)
+    # Input Size = 224 x 224 (pre-Trained model)
+    my_input = model.layers[0].input
 
-    return Model(inputs=base_model.input, outputs=predictions)
+    # Removing last layer in pre-trained model (it's for 1000 classes)
+    # Changes to our classe number (Our Need)
+    output = model.layers[-2].output
+
+    x = layers.Dense(1024)(output)
+    x = layers.Activation('relu')(x)
+    x = layers.Dense(no_class, activation='softmax')(x)
+
+    return Model(inputs=my_input, outputs=x)
 

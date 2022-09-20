@@ -30,6 +30,11 @@ model_type = args["model"]
 model_path = args['model_save']
 
 if os.path.isfile(model_path) is False:
+
+    # If selected Model is Mobilenet V2
+    if model_type == 'mobilenetV2':
+        img_size = 224
+
     # All image data into a single list
     print('[INFO] Image Data Extraction Started...')
     img_list, class_list, num_class = data_to_list(path_to_dir, img_size)
@@ -61,7 +66,7 @@ if os.path.isfile(model_path) is False:
     if model_type == 'custom':
         model = custom_model(num_class, img_size)
     elif model_type == 'mobilenetV2':
-        model = mobilenet_v2_model(num_class, img_size)
+        model = mobilenet_v2_model(num_class)
     # Model Training
     print('[INFO] Model Training Started...')
     model.compile(
