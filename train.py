@@ -100,7 +100,7 @@ if os.path.isfile(model_path) is False:
     # Plot the Graph.
     plt.plot(epochs, metric_loss, 'blue', label=metric_loss)
     plt.plot(epochs, metric_val_loss, 'red', label=metric_val_loss)
-    plt.plot(epochs, metric_accuracy, 'blue', label=metric_accuracy)
+    plt.plot(epochs, metric_accuracy, 'cyan', label=metric_accuracy)
     plt.plot(epochs, metric_val_accuracy, 'green', label=metric_val_accuracy)
 
     # Add title to the plot.
