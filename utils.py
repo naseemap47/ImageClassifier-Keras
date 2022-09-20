@@ -24,7 +24,7 @@ def data_to_list(path_to_data, img_size):
             images.append(img)
             class_var.append(class_name)
 
-        print(f'[INFO] Extracted {class_name}')
+        print(f'[INFO] Extracted: {class_name}')
 
     images = np.array(images)
     class_var = np.array(class_var)
@@ -50,7 +50,6 @@ def create_generators(batch_size, no_class,
         height_shift_range=0.1
     )
     val_preprocessor = ImageDataGenerator(rescale=1 / 255)
-
     train_generators = train_preprocessor.flow(
         x_train, y_train,
         batch_size=batch_size,
@@ -61,5 +60,4 @@ def create_generators(batch_size, no_class,
         batch_size=batch_size,
         shuffle=False
     )
-
     return train_generators, val_generators
