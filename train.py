@@ -2,6 +2,7 @@ from utils import data_to_list, create_generators
 from sklearn.model_selection import train_test_split
 from keras.callbacks import EarlyStopping
 from Models import custom_model, mobilenet_v2_model
+import matplotlib.pyplot as plt
 import os
 import argparse
 
@@ -86,6 +87,34 @@ if os.path.isfile(model_path) is False:
     # Saved Model
     model.save(model_path)
     print(f'[INFO] Successfully Saved model in {model_path}')
+
+    # Plot History
+    metric_loss = history.history['loss']
+    metric_val_loss = history.history['val_loss']
+    metric_accuracy = history.history['accuracy']
+    metric_val_accuracy = history.history['val_accuracy']
+
+    # Construct a range object which will be used as x-axis (horizontal plane) of the graph.
+    epochs = range(len(metric_loss))
+
+    # Plot the Graph.
+    plt.plot(epochs, metric_loss, 'blue', label=metric_loss)
+    plt.plot(epochs, metric_val_loss, 'red', label=metric_val_loss)
+    plt.plot(epochs, metric_accuracy, 'blue', label=metric_accuracy)
+    plt.plot(epochs, metric_val_accuracy, 'green', label=metric_val_accuracy)
+
+    # Add title to the plot.
+    plt.title(str('Model Metrics'))
+
+    # Add legend to the plot.
+    plt.legend(['loss', 'val_loss', 'accuracy', 'val_accuracy'])
+
+    # Save Model Metrics Plot
+    model_name = os.path.split(model_path)[1]
+    path_to_metrics = os.path.splitext(model_name)[0]
+    path_to_metrics = f'{path_to_metrics}_metrics.png'
+    plt.savefig(path_to_metrics, bbox_inches='tight')
+    print(f'[INFO] Metrics saved as {path_to_metrics}')
 
 else:
     print(f'[INFO] {model_path} is already Exist')
