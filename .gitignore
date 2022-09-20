@@ -133,3 +133,7 @@ Data/
 
 # Model
 model.h5
+
+# Output
+ImageOutput/
+output.avi
