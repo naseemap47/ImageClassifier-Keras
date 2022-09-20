@@ -1,40 +1,47 @@
 import os
 import cv2
 from keras.models import load_model
-import pandas as pd
 import tensorflow as tf
 import numpy as np
+import argparse
 
 
-# CAMERA RESOLUTION
-# frameWidth = 640
-# frameHeight = 480
+ap = argparse.ArgumentParser()
+ap.add_argument("-i", "--dataset", type=str, required=True,
+                help="path to dataset/dir")
+ap.add_argument("--img_size", type=int, required=True,
+                help="Size of Image used to train the model")                
+ap.add_argument("-m", "--model", type=str, required=True,
+                help="path to saved .h5 model, eg: dir/model.h5")
+ap.add_argument("-c", "--conf", type=float, required=True,
+                help="min prediction conf to detect pose class (0<conf<1)")
+ap.add_argument("--source", type=str, required=True,
+                help="path to sample image")
+ap.add_argument("--save", action='store_true',
+                help="Save video")
 
-# PROBABILITY THRESHOLD
-threshold = 0.75
-img_size = 224
-
-cap = cv2.VideoCapture(0)
-# cap.set(3, frameWidth)
-# cap.set(4, frameHeight)
+args = vars(ap.parse_args())
+source = args["source"]
+path_saved_model = args["model"]
+threshold = args["conf"]
+save = args['save']
+path_to_data = args['dataset']
+img_size = args['img_size']
 
 # Model
-model = load_model('model.h5')
-# labels = pd.read_csv('labels.csv')
-# traffic_labels = labels['Name']
+saved_model = load_model(path_saved_model)
+class_names = sorted(os.listdir(path_to_data))
 
-class_names = sorted(os.listdir('Dataset'))
-
-while True:
-    success, img_og = cap.read()
-    # img_rgb = cv2.cvtColor(img_og, cv2.COLOR_BGR2RGB)
-    img = cv2.resize(img_og, (img_size, img_size))
-    img = img.astype('float32') / 255
+###### Image ######
+if source.endswith(('.jpg', '.jpeg', '.png')):
+    path_to_img = source
+    img_og = cv2.imread(path_to_img)
+    img_resize = cv2.resize(img_og, (img_size, img_size))
+    img = img_resize.astype('float32') / 255
     img = tf.keras.preprocessing.image.img_to_array(img)
     img = np.expand_dims(img, axis=0)
 
-    # Prediction
-    prediction = model.predict(img)[0]
+    prediction = saved_model.predict(img)[0]
     predict = class_names[prediction.argmax()]
     # print(predict)
     prob_value = np.amax(prediction)
@@ -52,38 +59,77 @@ while True:
                     (180, 75), cv2.FONT_HERSHEY_PLAIN, 1.5,
                     (0, 255, 0), 2, cv2.LINE_AA)
 
+    if save:
+        os.makedirs('ImageOutput', exist_ok=True)
+        img_full_name = os.path.split(path_to_img)[1]
+        img_name = os.path.splitext(img_full_name)[0]
+        path_to_save_img = f'ImageOutput/{img_name}.jpg'
+        cv2.imwrite(f'{path_to_save_img}', img)
+        print(f'[INFO] Output Image Saved in {path_to_save_img}')
+
     cv2.imshow('Webcam', img_og)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+    if cv2.waitKey(0) & 0xFF == ord('q'):
         cv2.destroyAllWindows()
-        break
-
-###### Image ######
-
-img_og = cv2.imread('Dataset/Bicycles crossing/29_10561_1577671999.1237395.png')
-img_resize = cv2.resize(img_og, (img_size, img_size))
-img = img_resize.astype('float32') / 255
-img = tf.keras.preprocessing.image.img_to_array(img)
-img = np.expand_dims(img, axis=0)
+    print('[INFO] Inference on Test Image is Ended...')
 
 
-prediction = model.predict(img)[0]
-predict = class_names[prediction.argmax()]
-# print(predict)
-prob_value = np.amax(prediction)
-if prob_value > threshold:
-    cv2.putText(img_og, "CLASS: ", (20, 35),
-                cv2.FONT_HERSHEY_PLAIN, 1.5,
-                (255, 0, 255), 2, cv2.LINE_AA)
-    cv2.putText(img_og, "PROBABILITY: ", (20, 75),
-                cv2.FONT_HERSHEY_PLAIN, 1.5,
-                (255, 0, 255), 2, cv2.LINE_AA)
-    cv2.putText(img_og, str(predict), (120, 35),
-                cv2.FONT_HERSHEY_PLAIN, 1.5,
-                (0, 255, 0), 2, cv2.LINE_AA)
-    cv2.putText(img_og, str(round(prob_value * 100, 2)) + "%",
-                (180, 75), cv2.FONT_HERSHEY_PLAIN, 1.5,
-                (0, 255, 0), 2, cv2.LINE_AA)
+####### Video or Camera ########
+else:
+    # Web-cam
+    if source.isnumeric():
+        source = int(source)
 
-cv2.imshow('Webcam', img_og)
-if cv2.waitKey(0) & 0xFF == ord('q'):
+    cap = cv2.VideoCapture(source)
+    source_width = int(cap.get(3))
+    source_height = int(cap.get(4))
+
+    # Write Video
+    if save:
+        out_video = cv2.VideoWriter('output.avi', 
+                            cv2.VideoWriter_fourcc(*'MJPG'),
+                            10, (source_width, source_height))
+
+    while True:
+        success, img_og = cap.read()
+        if not success:
+            print('[ERROR] Failed to Read Video feed')
+            break
+        img = cv2.resize(img_og, (img_size, img_size))
+        img = img.astype('float32') / 255
+        img = tf.keras.preprocessing.image.img_to_array(img)
+        img = np.expand_dims(img, axis=0)
+
+        # Prediction
+        prediction = saved_model.predict(img)[0]
+        predict = class_names[prediction.argmax()]
+        # print(predict)
+        prob_value = np.amax(prediction)
+        if prob_value > threshold:
+            cv2.putText(img_og, "CLASS: ", (20, 35),
+                        cv2.FONT_HERSHEY_PLAIN, 1.5,
+                        (255, 0, 255), 2, cv2.LINE_AA)
+            cv2.putText(img_og, "PROBABILITY: ", (20, 75),
+                        cv2.FONT_HERSHEY_PLAIN, 1.5,
+                        (255, 0, 255), 2, cv2.LINE_AA)
+            cv2.putText(img_og, str(predict), (120, 35),
+                        cv2.FONT_HERSHEY_PLAIN, 1.5,
+                        (0, 255, 0), 2, cv2.LINE_AA)
+            cv2.putText(img_og, str(round(prob_value * 100, 2)) + "%",
+                        (180, 75), cv2.FONT_HERSHEY_PLAIN, 1.5,
+                        (0, 255, 0), 2, cv2.LINE_AA)
+
+        # Write Video
+        if save:
+            video_write_size = cv2.resize(img_og, (source_width, source_height))
+            out_video.write(video_write_size)
+
+        cv2.imshow('Webcam', img_og)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+    
+    cap.release()
+    if save:
+        out_video.release()
+        print("[INFO] Out video Saved as 'output.avi'")
     cv2.destroyAllWindows()
+    print('[INFO] Inference on Videostream is Ended...')
