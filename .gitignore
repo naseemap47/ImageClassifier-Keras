@@ -130,3 +130,6 @@ dmypy.json
 
 # Data
 Data/
+
+# Model
+model.h5
