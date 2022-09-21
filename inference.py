@@ -23,7 +23,6 @@ source = args["source"]
 path_saved_model = args["model"]
 threshold = args["conf"]
 save = args['save']
-path_to_data = args['dataset']
 img_size = args['img_size']
 
 # Model
