@@ -7,8 +7,6 @@ import argparse
 
 
 ap = argparse.ArgumentParser()
-ap.add_argument("-i", "--dataset", type=str, required=True,
-                help="path to dataset/dir")
 ap.add_argument("--img_size", type=int, required=True,
                 help="Size of Image used to train the model")                
 ap.add_argument("-m", "--model", type=str, required=True,
@@ -30,7 +28,8 @@ img_size = args['img_size']
 
 # Model
 saved_model = load_model(path_saved_model)
-class_names = sorted(os.listdir(path_to_data))
+f = open('classes.txt')
+class_names = f.read().splitlines()
 
 ###### Image ######
 if source.endswith(('.jpg', '.jpeg', '.png')):
