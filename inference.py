@@ -42,7 +42,7 @@ if source.endswith(('.jpg', '.jpeg', '.png')):
 
     prediction = saved_model.predict(img)[0]
     predict = class_names[prediction.argmax()]
-    # print(predict)
+    print('[INFO] Predicted Class: ', predict)
     prob_value = np.amax(prediction)
 
     # if resize is less than original size
