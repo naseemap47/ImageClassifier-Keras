@@ -35,7 +35,7 @@ import glob
 #     return images, class_var, num_class
 
 
-def data_to_list(path_to_data):
+def data_to_list(path_to_data, img_size):
     images = []
     class_no = []
     list_class = os.listdir(path_to_data)
@@ -45,6 +45,7 @@ def data_to_list(path_to_data):
         print(x, end=' ')
         for y in img_list:
             img = cv2.imread(os.path.join(path_to_data, str(x), y))
+            img = cv2.resize(img, (img_size, img_size))
             images.append(img)
             class_no.append(x)
     images = np.array(images)
