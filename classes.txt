@@ -1,2 +1,2 @@
-Speed Limit 20km/hr
-Speed Limit 30km/hr
+Class Name 1
+Class Name 2
