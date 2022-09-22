@@ -11,6 +11,9 @@ ap.add_argument("--img_size", type=int, required=True,
                 help="Size of Image used to train the model")                
 ap.add_argument("-m", "--model", type=str, required=True,
                 help="path to saved .h5 model, eg: dir/model.h5")
+ap.add_argument("--model_type", type=str,  default='mobilenetV2',
+                choices=['custom', 'mobilenetV2', 'vgg16'],
+                help="select model type custom or mobilenetV2,..etc")
 ap.add_argument("-c", "--conf", type=float, required=True,
                 help="min prediction conf to detect pose class (0<conf<1)")
 ap.add_argument("--source", type=str, required=True,
@@ -21,6 +24,7 @@ ap.add_argument("--save", action='store_true',
 args = vars(ap.parse_args())
 source = args["source"]
 path_saved_model = args["model"]
+model_type = args["model_type"]
 threshold = args["conf"]
 save = args['save']
 img_size = args['img_size']
@@ -34,11 +38,27 @@ class_names = f.read().splitlines()
 if source.endswith(('.jpg', '.jpeg', '.png')):
     path_to_img = source
     img_og = cv2.imread(path_to_img)
+    img_rgb = cv2.cvtColor(img_og, cv2.COLOR_BGR2RGB)
     h, w, _ = img_og.shape
-    img_resize = cv2.resize(img_og, (img_size, img_size))
-    img = img_resize.astype('float32') / 255
-    img = tf.keras.preprocessing.image.img_to_array(img)
-    img = np.expand_dims(img, axis=0)
+    img_resize = cv2.resize(img_rgb, (img_size, img_size))
+
+    # Custom Model
+    if model_type == 'custom':
+        img = img_resize.astype('float32') / 255
+        img = tf.keras.preprocessing.image.img_to_array(img)
+        img = np.expand_dims(img, axis=0)
+    
+    # MobileNetV2
+    elif model_type == 'mobilenetV2':
+        img = tf.keras.preprocessing.image.img_to_array(img_resize)
+        img = np.expand_dims(img, axis=0)
+        img = tf.keras.applications.mobilenet_v2.preprocess_input(img)
+    
+    # VGG16
+    elif model_type == 'vgg16':
+        img = tf.keras.preprocessing.image.img_to_array(img_resize)
+        img = np.expand_dims(img, axis=0)
+        img = tf.keras.applications.vgg16.preprocess_input(img)
 
     prediction = saved_model.predict(img)[0]
     predict = class_names[prediction.argmax()]
@@ -109,11 +129,27 @@ else:
         if not success:
             print('[ERROR] Failed to Read Video feed')
             break
+        img_rgb = cv2.cvtColor(img_og, cv2.COLOR_BGR2RGB)
         h, w, _ = img_og.shape
-        img_resize = cv2.resize(img_og, (img_size, img_size))
-        img = img_resize.astype('float32') / 255
-        img = tf.keras.preprocessing.image.img_to_array(img)
-        img = np.expand_dims(img, axis=0)
+        img_resize = cv2.resize(img_rgb, (img_size, img_size))
+
+        # Custom Model
+        if model_type == 'custom':
+            img = img_resize.astype('float32') / 255
+            img = tf.keras.preprocessing.image.img_to_array(img)
+            img = np.expand_dims(img, axis=0)
+        
+        # MobileNetV2
+        elif model_type == 'mobilenetV2':
+            img = tf.keras.preprocessing.image.img_to_array(img_resize)
+            img = np.expand_dims(img, axis=0)
+            img = tf.keras.applications.mobilenet_v2.preprocess_input(img)
+        
+        # VGG16
+        elif model_type == 'vgg16':
+            img = tf.keras.preprocessing.image.img_to_array(img_resize)
+            img = np.expand_dims(img, axis=0)
+            img = tf.keras.applications.vgg16.preprocess_input(img)
 
         # Prediction
         prediction = saved_model.predict(img)[0]

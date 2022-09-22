@@ -50,7 +50,8 @@ if os.path.isfile(model_path) is False:
     train_generators, val_generators = create_generators(
         batch_size*2, num_class,
         x_train, y_train,
-        x_val, y_val
+        x_val, y_val,
+        model_type
     )
     print('[INFO] Image Data Preprocessing Completed...')
 
@@ -70,6 +71,11 @@ if os.path.isfile(model_path) is False:
         model = mobilenet_v2_model(num_class)
     elif model_type == 'vgg16':
         model = vgg16_model(num_class)
+    
+    # Model Summary
+    print(f'[INFO] {model_type} Model Summary:\n')
+    print(model.summary())
+    
     # Model Training
     print('[INFO] Model Training Started...')
     model.compile(
