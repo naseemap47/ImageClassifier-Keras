@@ -70,6 +70,10 @@ if os.path.isfile(model_path) is False:
         model = mobilenet_v2_model(num_class)
     elif model_type == 'vgg16':
         model = vgg16_model(num_class)
+    
+    # Model Summary
+    print(f'[INFO] {model_type} Model Summary:\n', model.summary())
+    
     # Model Training
     print('[INFO] Model Training Started...')
     model.compile(
