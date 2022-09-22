@@ -50,7 +50,8 @@ if os.path.isfile(model_path) is False:
     train_generators, val_generators = create_generators(
         batch_size*2, num_class,
         x_train, y_train,
-        x_val, y_val
+        x_val, y_val,
+        model_type
     )
     print('[INFO] Image Data Preprocessing Completed...')
 
