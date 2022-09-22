@@ -131,8 +131,11 @@ dmypy.json
 # Data
 Data/
 
-# Model
-model.h5
+# Models
+*.h5
+
+# Metrics Plot
+*.png
 
 # Output
 ImageOutput/
