@@ -73,7 +73,8 @@ if os.path.isfile(model_path) is False:
         model = vgg16_model(num_class)
     
     # Model Summary
-    print(f'[INFO] {model_type} Model Summary:\n', model.summary())
+    print(f'[INFO] {model_type} Model Summary:\n')
+    print(model.summary())
     
     # Model Training
     print('[INFO] Model Training Started...')
