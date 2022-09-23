@@ -10,7 +10,7 @@ import argparse
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--dataset", type=str, required=True,
                 help="path to dataset/dir")
-ap.add_argument("-s", "--img_size", type=int, required=True,
+ap.add_argument("-s", "--img_size", type=int, required=False,
                 help="Size of Image used to train the model")
 ap.add_argument("-b", "--batch_size", type=int, default=32,
                 help="batch size of model training")
