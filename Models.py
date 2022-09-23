@@ -51,7 +51,7 @@ def vgg_model(no_class, model_type):
     return Model(inputs=my_input, outputs=x)
 
 
-########### MobileNet ##########
+########## MobileNet ##########
 
 def mobilenet_model(no_class, model_type):
 
@@ -75,6 +75,55 @@ def mobilenet_model(no_class, model_type):
     my_input = model.layers[0].input
 
     # Removing last layer in pre-trained model (it's for 1000 classes)
+    # Changes to our classe number (Our Need)
+    output = model.layers[-2].output
+
+    x = layers.Dense(1024)(output)
+    x = layers.Activation('relu')(x)
+    x = layers.Dense(no_class, activation='softmax')(x)
+
+    return Model(inputs=my_input, outputs=x)
+
+
+########## EfficientNet ##########
+
+def efficientnet_model(no_class, model_type):
+    
+    # EfficientNetB0
+    if model_type == 'efficientnetB0':
+        model = tf.keras.applications.EfficientNetB0()
+
+    # EfficientNetB1
+    elif model_type == 'efficientnetB1':
+        model = tf.keras.applications.EfficientNetB1()
+
+    # EfficientNetB2
+    elif model_type == 'efficientnetB2':
+        model = tf.keras.applications.EfficientNetB2()
+    
+    # EfficientNetB3
+    elif model_type == 'efficientnetB3':
+        model = tf.keras.applications.EfficientNetB3()
+
+    # EfficientNetB4
+    elif model_type == 'efficientnetB4':
+        model = tf.keras.applications.EfficientNetB4()
+
+    # EfficientNetB5
+    elif model_type == 'efficientnetB5':
+        model = tf.keras.applications.EfficientNetB5()
+
+    # EfficientNetB6
+    elif model_type == 'efficientnetB6':
+        model = tf.keras.applications.EfficientNetB6()
+
+    # EfficientNetB7
+    elif model_type == 'efficientnetB7':
+        model = tf.keras.applications.EfficientNetB7()
+
+    # Input Size = 224 x 224 (pre-Trained model)
+    my_input = model.layers[0].input
+
     # Changes to our classe number (Our Need)
     output = model.layers[-2].output
 

@@ -1,7 +1,7 @@
 from utils import data_to_list, create_generators
 from sklearn.model_selection import train_test_split
 from keras.callbacks import EarlyStopping
-from Models import custom_model, mobilenet_model, vgg_model
+from Models import custom_model, mobilenet_model, vgg_model, efficientnet_model
 import matplotlib.pyplot as plt
 import os
 import argparse
@@ -10,7 +10,7 @@ import argparse
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--dataset", type=str, required=True,
                 help="path to dataset/dir")
-ap.add_argument("-s", "--img_size", type=int, required=True,
+ap.add_argument("-s", "--img_size", type=int, required=False,
                 help="Size of Image used to train the model")
 ap.add_argument("-b", "--batch_size", type=int, default=32,
                 help="batch size of model training")
@@ -18,9 +18,11 @@ ap.add_argument("-e", "--epochs", type=int, default=50,
                 help="epochs of model training")
 ap.add_argument("--model", type=str,  default='mobilenetV2',
                 choices=[
-                    'custom', 'vgg16', 'vgg19',
-                    'mobilenet', 'mobilenetV2',
-                    'mobilenetV3Small', 'mobilenetV3Large',
+                    'custom', 'vgg16', 'vgg19', 'mobilenet',
+                    'mobilenetV2', 'mobilenetV3Small', 'mobilenetV3Large',
+                    'efficientnetB0', 'efficientnetB1', 'efficientnetB2',
+                    'efficientnetB3', 'efficientnetB4', 'efficientnetB5',
+                    'efficientnetB6', 'efficientnetB7'
                 ],
                 help="select model type custom or mobilenetV2,..etc")
 ap.add_argument("--model_save", type=str, required=True,
@@ -44,6 +46,27 @@ if os.path.isfile(model_path) is False:
     if model_type == 'mobilenet' or model_type == 'mobilenetV2' or \
         model_type == 'mobilenetV3Small' or model_type == 'mobilenetV3Large':
         img_size = 224
+
+    # If selected Model is EfficientNet
+    if model_type == 'efficientnetB0':
+        img_size = 224
+    if model_type == 'efficientnetB1':
+        img_size = 240
+    if model_type == 'efficientnetB2':
+        img_size = 260
+    if model_type == 'efficientnetB3':
+        img_size = 300
+    if model_type == 'efficientnetB4':
+        img_size = 380
+    if model_type == 'efficientnetB5':
+        img_size = 456
+    if model_type == 'efficientnetB6':
+        img_size = 528
+    if model_type == 'efficientnetB7':
+        img_size = 600
+
+    print(f'[INFO] {model_type} Model Expected input size {img_size, img_size, 3}\n')
+    print(f'[INFO] So Taking Input Size as {img_size, img_size, 3}')
 
     # All image data into a single list
     print('[INFO] Image Data Extraction Started...')
@@ -84,6 +107,13 @@ if os.path.isfile(model_path) is False:
     elif model_type == 'mobilenet' or model_type == 'mobilenetV2' or \
         model_type == 'mobilenetV3Small' or model_type == 'mobilenetV3Large':
         model = mobilenet_model(num_class, model_type)
+
+    # EfficientNet
+    elif model_type == 'efficientnetB0' or model_type == 'efficientnetB1' or \
+        model_type == 'efficientnetB2' or model_type == 'efficientnetB3' or \
+        model_type == 'efficientnetB4' or model_type == 'efficientnetB5' or \
+        model_type == 'efficientnetB6' or model_type == 'efficientnetB7':
+        model = efficientnet_model(num_class, model_type)
 
     # Model Summary
     print(f'[INFO] {model_type} Model Summary:\n')

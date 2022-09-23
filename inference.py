@@ -7,17 +7,19 @@ import argparse
 
 
 ap = argparse.ArgumentParser()
-ap.add_argument("--img_size", type=int, required=True,
+ap.add_argument("--img_size", type=int, required=False,
                 help="Size of Image used to train the model")                
 ap.add_argument("-m", "--model", type=str, required=True,
                 help="path to saved .h5 model, eg: dir/model.h5")
 ap.add_argument("--model_type", type=str,  default='mobilenetV2',
                 choices=[
-                	'custom', 'vgg16', 'vgg19',
-                    'mobilenet', 'mobilenetV2',
-                    'mobilenetV3Small', 'mobilenetV3Large',
+                    'custom', 'vgg16', 'vgg19', 'mobilenet',
+                    'mobilenetV2', 'mobilenetV3Small', 'mobilenetV3Large',
+                    'efficientnetB0', 'efficientnetB1', 'efficientnetB2',
+                    'efficientnetB3', 'efficientnetB4', 'efficientnetB5',
+                    'efficientnetB6', 'efficientnetB7'
                 ],
-                help="select model type custom or mobilenetV2,..etc")
+                help="select model type custom or mobilenetV2,vgg16..etc")
 ap.add_argument("-c", "--conf", type=float, required=True,
                 help="min prediction conf to detect pose class (0<conf<1)")
 ap.add_argument("--source", type=str, required=True,
@@ -32,6 +34,40 @@ model_type = args["model_type"]
 threshold = args["conf"]
 save = args['save']
 img_size = args['img_size']
+
+##############################
+
+# If selected Model is VGGG
+if model_type == 'vgg16' or model_type == 'vgg19':
+    img_size = 224
+
+# If selected Model is MobileNet
+if model_type == 'mobilenet' or model_type == 'mobilenetV2' or \
+    model_type == 'mobilenetV3Small' or model_type == 'mobilenetV3Large':
+    img_size = 224
+
+# If selected Model is EfficientNet
+if model_type == 'efficientnetB0':
+    img_size = 224
+if model_type == 'efficientnetB1':
+    img_size = 240
+if model_type == 'efficientnetB2':
+    img_size = 260
+if model_type == 'efficientnetB3':
+    img_size = 300
+if model_type == 'efficientnetB4':
+    img_size = 380
+if model_type == 'efficientnetB5':
+    img_size = 456
+if model_type == 'efficientnetB6':
+    img_size = 528
+if model_type == 'efficientnetB7':
+    img_size = 600
+
+print(f'[INFO] {model_type} Model Expected input size {img_size, img_size, 3}\n')
+print(f'[INFO] So Taking Input Size as {img_size, img_size, 3}')
+
+##############################
 
 # Model
 saved_model = load_model(path_saved_model)
@@ -73,7 +109,15 @@ if source.endswith(('.jpg', '.jpeg', '.png')):
         # MobileNetV3Small & MobileNetV3Large
         elif model_type == 'mobilenetV3Small' or model_type == 'mobilenetV3Large':
             img = tf.keras.applications.mobilenet_v3.preprocess_input(img)
-            
+
+        # EfficientNet B0 to B7
+        elif model_type == 'efficientnetB0' or model_type == 'efficientnetB1' or \
+        model_type == 'efficientnetB2' or model_type == 'efficientnetB3' or \
+        model_type == 'efficientnetB4' or model_type == 'efficientnetB5' or \
+        model_type == 'efficientnetB6' or model_type == 'efficientnetB7':
+            img = tf.keras.applications.efficientnet.preprocess_input(img)
+
+
     prediction = saved_model.predict(img)[0]
     predict = class_names[prediction.argmax()]
     print('[INFO] Predicted Class: ', predict)
@@ -116,7 +160,7 @@ if source.endswith(('.jpg', '.jpeg', '.png')):
         cv2.imwrite(f'{path_to_save_img}', img_og)
         print(f'[INFO] Output Image Saved in {path_to_save_img}')
 
-    cv2.imshow('Webcam', img_og)
+    cv2.imshow('Image', img_og)
     if cv2.waitKey(0) & 0xFF == ord('q'):
         cv2.destroyAllWindows()
     print('[INFO] Inference on Test Image is Ended...')
@@ -175,6 +219,13 @@ else:
             elif model_type == 'mobilenetV3Small' or model_type == 'mobilenetV3Large':
                 img = tf.keras.applications.mobilenet_v3.preprocess_input(img)
 
+            # EfficientNet B0 to B7
+            elif model_type == 'efficientnetB0' or model_type == 'efficientnetB1' or \
+            model_type == 'efficientnetB2' or model_type == 'efficientnetB3' or \
+            model_type == 'efficientnetB4' or model_type == 'efficientnetB5' or \
+            model_type == 'efficientnetB6' or model_type == 'efficientnetB7':
+                img = tf.keras.applications.efficientnet.preprocess_input(img)
+                
 
         # Prediction
         prediction = saved_model.predict(img)[0]
@@ -216,7 +267,7 @@ else:
             video_write_size = cv2.resize(img_og, (source_width, source_height))
             out_video.write(video_write_size)
 
-        cv2.imshow('Webcam', img_og)
+        cv2.imshow('Video Output', img_og)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
     

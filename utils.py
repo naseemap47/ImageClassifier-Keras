@@ -93,6 +93,19 @@ def create_generators(batch_size, no_class,
             preprocessing_function=tf.keras.applications.mobilenet_v3.preprocess_input
         )
 
+    # EfficientNet
+    elif model_type == 'efficientnetB0' or model_type == 'efficientnetB1' or \
+        model_type == 'efficientnetB2' or model_type == 'efficientnetB3' or \
+        model_type == 'efficientnetB4' or model_type == 'efficientnetB5' or \
+        model_type == 'efficientnetB6' or model_type == 'efficientnetB7':
+        train_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.efficientnet.preprocess_input,
+        )
+        val_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.efficientnet.preprocess_input
+        )
+
+
     train_generators = train_preprocessor.flow(
         x_train, y_train,
         batch_size=batch_size,
