@@ -13,11 +13,13 @@ ap.add_argument("-m", "--model", type=str, required=True,
                 help="path to saved .h5 model, eg: dir/model.h5")
 ap.add_argument("--model_type", type=str,  default='mobilenetV2',
                 choices=[
-                	'custom', 'vgg16', 'vgg19',
-                    'mobilenet', 'mobilenetV2',
-                    'mobilenetV3Small', 'mobilenetV3Large',
+                    'custom', 'vgg16', 'vgg19', 'mobilenet',
+                    'mobilenetV2', 'mobilenetV3Small', 'mobilenetV3Large',
+                    'efficientnetB0', 'efficientnetB1', 'efficientnetB2',
+                    'efficientnetB3', 'efficientnetB4', 'efficientnetB5',
+                    'efficientnetB6', 'efficientnetB7'
                 ],
-                help="select model type custom or mobilenetV2,..etc")
+                help="select model type custom or mobilenetV2,vgg16..etc")
 ap.add_argument("-c", "--conf", type=float, required=True,
                 help="min prediction conf to detect pose class (0<conf<1)")
 ap.add_argument("--source", type=str, required=True,
@@ -73,7 +75,15 @@ if source.endswith(('.jpg', '.jpeg', '.png')):
         # MobileNetV3Small & MobileNetV3Large
         elif model_type == 'mobilenetV3Small' or model_type == 'mobilenetV3Large':
             img = tf.keras.applications.mobilenet_v3.preprocess_input(img)
-            
+
+        # EfficientNet B0 to B7
+        elif model_type == 'efficientnetB0' or model_type == 'efficientnetB1' or \
+        model_type == 'efficientnetB2' or model_type == 'efficientnetB3' or \
+        model_type == 'efficientnetB4' or model_type == 'efficientnetB5' or \
+        model_type == 'efficientnetB6' or model_type == 'efficientnetB7':
+            img = tf.keras.applications.efficientnet.preprocess_input(img)
+
+
     prediction = saved_model.predict(img)[0]
     predict = class_names[prediction.argmax()]
     print('[INFO] Predicted Class: ', predict)
@@ -175,6 +185,13 @@ else:
             elif model_type == 'mobilenetV3Small' or model_type == 'mobilenetV3Large':
                 img = tf.keras.applications.mobilenet_v3.preprocess_input(img)
 
+            # EfficientNet B0 to B7
+            elif model_type == 'efficientnetB0' or model_type == 'efficientnetB1' or \
+            model_type == 'efficientnetB2' or model_type == 'efficientnetB3' or \
+            model_type == 'efficientnetB4' or model_type == 'efficientnetB5' or \
+            model_type == 'efficientnetB6' or model_type == 'efficientnetB7':
+                img = tf.keras.applications.efficientnet.preprocess_input(img)
+                
 
         # Prediction
         prediction = saved_model.predict(img)[0]
