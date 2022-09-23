@@ -12,7 +12,11 @@ ap.add_argument("--img_size", type=int, required=True,
 ap.add_argument("-m", "--model", type=str, required=True,
                 help="path to saved .h5 model, eg: dir/model.h5")
 ap.add_argument("--model_type", type=str,  default='mobilenetV2',
-                choices=['custom', 'mobilenetV2', 'vgg16'],
+                choices=[
+                	'custom', 'vgg16', 'vgg19',
+                    'mobilenet', 'mobilenetV2',
+                    'mobilenetV3Small', 'mobilenetV3Large',
+                ],
                 help="select model type custom or mobilenetV2,..etc")
 ap.add_argument("-c", "--conf", type=float, required=True,
                 help="min prediction conf to detect pose class (0<conf<1)")
@@ -47,19 +51,29 @@ if source.endswith(('.jpg', '.jpeg', '.png')):
         img = img_resize.astype('float32') / 255
         img = tf.keras.preprocessing.image.img_to_array(img)
         img = np.expand_dims(img, axis=0)
-    
-    # MobileNetV2
-    elif model_type == 'mobilenetV2':
+    else:
         img = tf.keras.preprocessing.image.img_to_array(img_resize)
         img = np.expand_dims(img, axis=0)
-        img = tf.keras.applications.mobilenet_v2.preprocess_input(img)
-    
-    # VGG16
-    elif model_type == 'vgg16':
-        img = tf.keras.preprocessing.image.img_to_array(img_resize)
-        img = np.expand_dims(img, axis=0)
-        img = tf.keras.applications.vgg16.preprocess_input(img)
+        # VGG16
+        if model_type == 'vgg16':
+            img = tf.keras.applications.vgg16.preprocess_input(img)
 
+        # VGG19
+        elif model_type == 'vgg19':
+            img = tf.keras.applications.vgg19.preprocess_input(img)
+
+        # MobileNet
+        elif model_type == 'mobilenet':
+            img = tf.keras.applications.mobilenet.preprocess_input(img)
+
+        # MobileNetV2
+        elif model_type == 'mobilenetV2':
+            img = tf.keras.applications.mobilenet_v2.preprocess_input(img)
+
+        # MobileNetV3Small & MobileNetV3Large
+        elif model_type == 'mobilenetV3Small' or model_type == 'mobilenetV3Large':
+            img = tf.keras.applications.mobilenet_v3.preprocess_input(img)
+            
     prediction = saved_model.predict(img)[0]
     predict = class_names[prediction.argmax()]
     print('[INFO] Predicted Class: ', predict)
@@ -138,24 +152,29 @@ else:
             img = img_resize.astype('float32') / 255
             img = tf.keras.preprocessing.image.img_to_array(img)
             img = np.expand_dims(img, axis=0)
-        
-        # MobileNetV2
-        elif model_type == 'mobilenetV2':
+        else:
             img = tf.keras.preprocessing.image.img_to_array(img_resize)
             img = np.expand_dims(img, axis=0)
-            img = tf.keras.applications.mobilenet_v2.preprocess_input(img)
-        
-        # VGG16
-        elif model_type == 'vgg16':
-            img = tf.keras.preprocessing.image.img_to_array(img_resize)
-            img = np.expand_dims(img, axis=0)
-            img = tf.keras.applications.vgg16.preprocess_input(img)
+            # VGG16
+            if model_type == 'vgg16':
+                img = tf.keras.applications.vgg16.preprocess_input(img)
 
-        # VGG19
-        elif model_type == 'vgg19':
-            img = tf.keras.preprocessing.image.img_to_array(img_resize)
-            img = np.expand_dims(img, axis=0)
-            img = tf.keras.applications.vgg19.preprocess_input(img)
+            # VGG19
+            elif model_type == 'vgg19':
+                img = tf.keras.applications.vgg19.preprocess_input(img)
+
+            # MobileNet
+            elif model_type == 'mobilenet':
+                img = tf.keras.applications.mobilenet.preprocess_input(img)
+
+            # MobileNetV2
+            elif model_type == 'mobilenetV2':
+                img = tf.keras.applications.mobilenet_v2.preprocess_input(img)
+
+            # MobileNetV3Small & MobileNetV3Large
+            elif model_type == 'mobilenetV3Small' or model_type == 'mobilenetV3Large':
+                img = tf.keras.applications.mobilenet_v3.preprocess_input(img)
+
 
         # Prediction
         prediction = saved_model.predict(img)[0]

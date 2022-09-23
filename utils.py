@@ -37,7 +37,8 @@ def create_generators(batch_size, no_class,
     y_train = to_categorical(y_train, no_class)
     y_val = to_categorical(y_val, no_class)
 
-    # Preprocessor
+    ###### Preprocessor ######
+    # Custom
     if model_type == 'custom':
         train_preprocessor = ImageDataGenerator(
             rescale=1/255,
@@ -46,16 +47,8 @@ def create_generators(batch_size, no_class,
             height_shift_range=0.1
         )
         val_preprocessor = ImageDataGenerator(rescale=1/255)
-    elif model_type == 'mobilenetV2':
-        train_preprocessor = ImageDataGenerator(
-            preprocessing_function=tf.keras.applications.mobilenet_v2.preprocess_input,
-            # rotation_range=10,
-            # width_shift_range=0.1,
-            # height_shift_range=0.1
-        )
-        val_preprocessor = ImageDataGenerator(
-            preprocessing_function=tf.keras.applications.mobilenet_v2.preprocess_input
-        )
+    
+    # VGG
     elif model_type == 'vgg16':
         train_preprocessor = ImageDataGenerator(
             preprocessing_function=tf.keras.applications.vgg16.preprocess_input,
@@ -69,12 +62,35 @@ def create_generators(batch_size, no_class,
     elif model_type == 'vgg19':
         train_preprocessor = ImageDataGenerator(
             preprocessing_function=tf.keras.applications.vgg19.preprocess_input,
+        )
+        val_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.vgg19.preprocess_input
+        )
+
+    # MobileNet
+    elif model_type == 'mobilenet':
+        train_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.mobilenet.preprocess_input,
             # rotation_range=10,
             # width_shift_range=0.1,
             # height_shift_range=0.1
         )
         val_preprocessor = ImageDataGenerator(
-            preprocessing_function=tf.keras.applications.vgg19.preprocess_input
+            preprocessing_function=tf.keras.applications.mobilenet.preprocess_input
+        )
+    elif model_type == 'mobilenetV2':
+        train_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.mobilenet_v2.preprocess_input,
+        )
+        val_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.mobilenet_v2.preprocess_input
+        )
+    elif model_type == 'mobilenetV3Small' or model_type == 'mobilenetV3Large':
+        train_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.mobilenet_v3.preprocess_input,
+        )
+        val_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.mobilenet_v3.preprocess_input
         )
 
     train_generators = train_preprocessor.flow(
