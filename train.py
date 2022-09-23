@@ -48,11 +48,16 @@ if os.path.isfile(model_path) is False:
         img_size = 224
 
     # If selected Model is EfficientNet
-    if model_type == 'efficientnetB0' or model_type == 'efficientnetB1' or \
+    if model_type == 'efficientnetB0' or \
         model_type == 'efficientnetB2' or model_type == 'efficientnetB3' or \
         model_type == 'efficientnetB4' or model_type == 'efficientnetB5' or \
         model_type == 'efficientnetB6' or model_type == 'efficientnetB7':
         img_size = 224
+    if model_type == 'efficientnetB1':
+        img_size = 240
+
+    print(f'[INFO] {model_type} Model Expected input size {img_size, img_size, 3}\n')
+    print(f'[INFO] So Taking Input Size as {img_size, img_size, 3}')
 
     # All image data into a single list
     print('[INFO] Image Data Extraction Started...')
