@@ -160,7 +160,7 @@ if source.endswith(('.jpg', '.jpeg', '.png')):
         cv2.imwrite(f'{path_to_save_img}', img_og)
         print(f'[INFO] Output Image Saved in {path_to_save_img}')
 
-    cv2.imshow('Webcam', img_og)
+    cv2.imshow('Image', img_og)
     if cv2.waitKey(0) & 0xFF == ord('q'):
         cv2.destroyAllWindows()
     print('[INFO] Inference on Test Image is Ended...')
@@ -267,7 +267,7 @@ else:
             video_write_size = cv2.resize(img_og, (source_width, source_height))
             out_video.write(video_write_size)
 
-        cv2.imshow('Webcam', img_og)
+        cv2.imshow('Video Output', img_og)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
     
