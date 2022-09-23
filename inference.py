@@ -7,6 +7,8 @@ import argparse
 
 
 ap = argparse.ArgumentParser()
+ap.add_argument("--img_size", type=int, required=False,
+                help="Size of Image used to train the model")                
 ap.add_argument("-m", "--model", type=str, required=True,
                 help="path to saved .h5 model, eg: dir/model.h5")
 ap.add_argument("--model_type", type=str,  default='mobilenetV2',
@@ -31,6 +33,7 @@ path_saved_model = args["model"]
 model_type = args["model_type"]
 threshold = args["conf"]
 save = args['save']
+img_size = args['img_size']
 
 ##############################
 
