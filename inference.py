@@ -47,19 +47,29 @@ if source.endswith(('.jpg', '.jpeg', '.png')):
         img = img_resize.astype('float32') / 255
         img = tf.keras.preprocessing.image.img_to_array(img)
         img = np.expand_dims(img, axis=0)
-    
-    # MobileNetV2
-    elif model_type == 'mobilenetV2':
+    else:
         img = tf.keras.preprocessing.image.img_to_array(img_resize)
         img = np.expand_dims(img, axis=0)
-        img = tf.keras.applications.mobilenet_v2.preprocess_input(img)
-    
-    # VGG16
-    elif model_type == 'vgg16':
-        img = tf.keras.preprocessing.image.img_to_array(img_resize)
-        img = np.expand_dims(img, axis=0)
-        img = tf.keras.applications.vgg16.preprocess_input(img)
+        # VGG16
+        if model_type == 'vgg16':
+            img = tf.keras.applications.vgg16.preprocess_input(img)
 
+        # VGG19
+        elif model_type == 'vgg19':
+            img = tf.keras.applications.vgg19.preprocess_input(img)
+
+        # MobileNet
+        elif model_type == 'mobilenet':
+            img = tf.keras.applications.mobilenet.preprocess_input(img)
+
+        # MobileNetV2
+        elif model_type == 'mobilenetV2':
+            img = tf.keras.applications.mobilenet_v2.preprocess_input(img)
+
+        # MobileNetV3Small & MobileNetV3Large
+        elif model_type == 'mobilenetV3Small' or model_type == 'mobilenetV3Large':
+            img = tf.keras.applications.mobilenet_v3.preprocess_input(img)
+            
     prediction = saved_model.predict(img)[0]
     predict = class_names[prediction.argmax()]
     print('[INFO] Predicted Class: ', predict)
@@ -138,24 +148,29 @@ else:
             img = img_resize.astype('float32') / 255
             img = tf.keras.preprocessing.image.img_to_array(img)
             img = np.expand_dims(img, axis=0)
-        
-        # MobileNetV2
-        elif model_type == 'mobilenetV2':
+        else:
             img = tf.keras.preprocessing.image.img_to_array(img_resize)
             img = np.expand_dims(img, axis=0)
-            img = tf.keras.applications.mobilenet_v2.preprocess_input(img)
-        
-        # VGG16
-        elif model_type == 'vgg16':
-            img = tf.keras.preprocessing.image.img_to_array(img_resize)
-            img = np.expand_dims(img, axis=0)
-            img = tf.keras.applications.vgg16.preprocess_input(img)
+            # VGG16
+            if model_type == 'vgg16':
+                img = tf.keras.applications.vgg16.preprocess_input(img)
 
-        # VGG19
-        elif model_type == 'vgg19':
-            img = tf.keras.preprocessing.image.img_to_array(img_resize)
-            img = np.expand_dims(img, axis=0)
-            img = tf.keras.applications.vgg19.preprocess_input(img)
+            # VGG19
+            elif model_type == 'vgg19':
+                img = tf.keras.applications.vgg19.preprocess_input(img)
+
+            # MobileNet
+            elif model_type == 'mobilenet':
+                img = tf.keras.applications.mobilenet.preprocess_input(img)
+
+            # MobileNetV2
+            elif model_type == 'mobilenetV2':
+                img = tf.keras.applications.mobilenet_v2.preprocess_input(img)
+
+            # MobileNetV3Small & MobileNetV3Large
+            elif model_type == 'mobilenetV3Small' or model_type == 'mobilenetV3Large':
+                img = tf.keras.applications.mobilenet_v3.preprocess_input(img)
+
 
         # Prediction
         prediction = saved_model.predict(img)[0]
