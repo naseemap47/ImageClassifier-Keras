@@ -7,8 +7,6 @@ import argparse
 
 
 ap = argparse.ArgumentParser()
-ap.add_argument("--img_size", type=int, required=True,
-                help="Size of Image used to train the model")                
 ap.add_argument("-m", "--model", type=str, required=True,
                 help="path to saved .h5 model, eg: dir/model.h5")
 ap.add_argument("--model_type", type=str,  default='mobilenetV2',
@@ -33,7 +31,40 @@ path_saved_model = args["model"]
 model_type = args["model_type"]
 threshold = args["conf"]
 save = args['save']
-img_size = args['img_size']
+
+##############################
+
+# If selected Model is VGGG
+if model_type == 'vgg16' or model_type == 'vgg19':
+    img_size = 224
+
+# If selected Model is MobileNet
+if model_type == 'mobilenet' or model_type == 'mobilenetV2' or \
+    model_type == 'mobilenetV3Small' or model_type == 'mobilenetV3Large':
+    img_size = 224
+
+# If selected Model is EfficientNet
+if model_type == 'efficientnetB0':
+    img_size = 224
+if model_type == 'efficientnetB1':
+    img_size = 240
+if model_type == 'efficientnetB2':
+    img_size = 260
+if model_type == 'efficientnetB3':
+    img_size = 300
+if model_type == 'efficientnetB4':
+    img_size = 380
+if model_type == 'efficientnetB5':
+    img_size = 456
+if model_type == 'efficientnetB6':
+    img_size = 528
+if model_type == 'efficientnetB7':
+    img_size = 600
+
+print(f'[INFO] {model_type} Model Expected input size {img_size, img_size, 3}\n')
+print(f'[INFO] So Taking Input Size as {img_size, img_size, 3}')
+
+##############################
 
 # Model
 saved_model = load_model(path_saved_model)
