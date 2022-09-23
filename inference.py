@@ -12,7 +12,11 @@ ap.add_argument("--img_size", type=int, required=True,
 ap.add_argument("-m", "--model", type=str, required=True,
                 help="path to saved .h5 model, eg: dir/model.h5")
 ap.add_argument("--model_type", type=str,  default='mobilenetV2',
-                choices=['custom', 'mobilenetV2', 'vgg16'],
+                choices=[
+                	'custom', 'vgg16', 'vgg19',
+                    'mobilenet', 'mobilenetV2',
+                    'mobilenetV3Small', 'mobilenetV3Large',
+                ],
                 help="select model type custom or mobilenetV2,..etc")
 ap.add_argument("-c", "--conf", type=float, required=True,
                 help="min prediction conf to detect pose class (0<conf<1)")
