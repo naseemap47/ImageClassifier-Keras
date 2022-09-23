@@ -151,6 +151,12 @@ else:
             img = np.expand_dims(img, axis=0)
             img = tf.keras.applications.vgg16.preprocess_input(img)
 
+        # VGG19
+        elif model_type == 'vgg19':
+            img = tf.keras.preprocessing.image.img_to_array(img_resize)
+            img = np.expand_dims(img, axis=0)
+            img = tf.keras.applications.vgg19.preprocess_input(img)
+
         # Prediction
         prediction = saved_model.predict(img)[0]
         predict = class_names[prediction.argmax()]

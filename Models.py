@@ -62,3 +62,21 @@ def vgg16_model(no_class):
 
     return Model(inputs=my_input, outputs=x)
 
+
+def vgg19_model(no_class):
+
+    # VGG19
+    model = tf.keras.applications.VGG19()
+
+    # default input size is 224 x 224
+    my_input = model.layers[0].input
+
+    # Changes to our classe number (Our Need)
+    output = model.layers[-2].output
+
+    x = layers.Dense(1024)(output)
+    x = layers.Activation('relu')(x)
+    x = layers.Dense(no_class, activation='softmax')(x)
+
+    return Model(inputs=my_input, outputs=x)
+
