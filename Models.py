@@ -71,10 +71,9 @@ def mobilenet_model(no_class, model_type):
     elif model_type == 'mobilenetV3Large':
         model = tf.keras.applications.MobileNetV3Large()
 
-    # Input Size = 224 x 224 (pre-Trained model)
+    # Input Size = 224 x 224 (pr
     my_input = model.layers[0].input
 
-    # Removing last layer in pre-trained model (it's for 1000 classes)
     # Changes to our classe number (Our Need)
     output = model.layers[-2].output
 
@@ -121,7 +120,27 @@ def efficientnet_model(no_class, model_type):
     elif model_type == 'efficientnetB7':
         model = tf.keras.applications.EfficientNetB7()
 
-    # Input Size = 224 x 224 (pre-Trained model)
+    # Input Layer
+    my_input = model.layers[0].input
+
+    # Changes to our classe number (Our Need)
+    output = model.layers[-2].output
+
+    x = layers.Dense(1024)(output)
+    x = layers.Activation('relu')(x)
+    x = layers.Dense(no_class, activation='softmax')(x)
+
+    return Model(inputs=my_input, outputs=x)
+
+
+#### Xception ####
+
+def xception_model(no_class):
+
+    # Xception
+    model = tf.keras.applications.Xception()
+
+    # Input Size = 299 x 299 (pre-Trained model)
     my_input = model.layers[0].input
 
     # Changes to our classe number (Our Need)

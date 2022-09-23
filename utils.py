@@ -105,6 +105,14 @@ def create_generators(batch_size, no_class,
             preprocessing_function=tf.keras.applications.efficientnet.preprocess_input
         )
 
+    # Xception
+    elif model_type == 'xception':
+        train_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.xception.preprocess_input,
+        )
+        val_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.xception.preprocess_input
+        )
 
     train_generators = train_preprocessor.flow(
         x_train, y_train,
