@@ -66,6 +66,16 @@ def create_generators(batch_size, no_class,
         val_preprocessor = ImageDataGenerator(
             preprocessing_function=tf.keras.applications.vgg16.preprocess_input
         )
+    elif model_type == 'vgg19':
+        train_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.vgg19.preprocess_input,
+            # rotation_range=10,
+            # width_shift_range=0.1,
+            # height_shift_range=0.1
+        )
+        val_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.vgg19.preprocess_input
+        )
 
     train_generators = train_preprocessor.flow(
         x_train, y_train,

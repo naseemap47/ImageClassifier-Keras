@@ -1,7 +1,7 @@
 from utils import data_to_list, create_generators
 from sklearn.model_selection import train_test_split
 from keras.callbacks import EarlyStopping
-from Models import custom_model, mobilenet_v2_model, vgg16_model
+from Models import custom_model, mobilenet_v2_model, vgg16_model, vgg19_model
 import matplotlib.pyplot as plt
 import os
 import argparse
@@ -17,7 +17,9 @@ ap.add_argument("-b", "--batch_size", type=int, default=32,
 ap.add_argument("-e", "--epochs", type=int, default=50,
                 help="epochs of model training")
 ap.add_argument("--model", type=str,  default='mobilenetV2',
-                choices=['custom', 'mobilenetV2', 'vgg16'],
+                choices=[
+                    'custom', 'mobilenetV2', 'vgg16', 'vgg19'
+                ],
                 help="select model type custom or mobilenetV2,..etc")
 ap.add_argument("--model_save", type=str, required=True,
                 help="path to save model.h5")
@@ -33,7 +35,7 @@ model_path = args['model_save']
 if os.path.isfile(model_path) is False:
 
     # If selected Model is Mobilenet V2
-    if model_type == 'mobilenetV2' or model_type == 'vgg16':
+    if model_type == 'mobilenetV2' or model_type == 'vgg16' or model_type == 'vgg19':
         img_size = 224
 
     # All image data into a single list
@@ -71,6 +73,8 @@ if os.path.isfile(model_path) is False:
         model = mobilenet_v2_model(num_class)
     elif model_type == 'vgg16':
         model = vgg16_model(num_class)
+    elif model_type == 'vgg19':
+        model = vgg19_model(num_class)
     
     # Model Summary
     print(f'[INFO] {model_type} Model Summary:\n')
