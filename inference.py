@@ -17,7 +17,7 @@ ap.add_argument("--model_type", type=str,  default='mobilenetV2',
                     'mobilenetV2', 'mobilenetV3Small', 'mobilenetV3Large',
                     'efficientnetB0', 'efficientnetB1', 'efficientnetB2',
                     'efficientnetB3', 'efficientnetB4', 'efficientnetB5',
-                    'efficientnetB6', 'efficientnetB7'
+                    'efficientnetB6', 'efficientnetB7', 'xception'
                 ],
                 help="select model type custom or mobilenetV2,vgg16..etc")
 ap.add_argument("-c", "--conf", type=float, required=True,
