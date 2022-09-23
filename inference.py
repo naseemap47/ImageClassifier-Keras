@@ -64,6 +64,10 @@ if model_type == 'efficientnetB6':
 if model_type == 'efficientnetB7':
     img_size = 600
 
+# img_size for Xception Model
+if model_type == 'xception':
+    img_size = 299
+
 print(f'[INFO] {model_type} Model Expected input size {img_size, img_size, 3}\n')
 print(f'[INFO] So Taking Input Size as {img_size, img_size, 3}')
 
@@ -116,6 +120,10 @@ if source.endswith(('.jpg', '.jpeg', '.png')):
         model_type == 'efficientnetB4' or model_type == 'efficientnetB5' or \
         model_type == 'efficientnetB6' or model_type == 'efficientnetB7':
             img = tf.keras.applications.efficientnet.preprocess_input(img)
+
+        # Xception
+        elif model_type == 'xception':
+            img = tf.keras.applications.xception.preprocess_input(img)
 
 
     prediction = saved_model.predict(img)[0]
@@ -225,6 +233,10 @@ else:
             model_type == 'efficientnetB4' or model_type == 'efficientnetB5' or \
             model_type == 'efficientnetB6' or model_type == 'efficientnetB7':
                 img = tf.keras.applications.efficientnet.preprocess_input(img)
+
+            # Xception
+            elif model_type == 'xception':
+                img = tf.keras.applications.xception.preprocess_input(img)
                 
 
         # Prediction
