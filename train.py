@@ -1,7 +1,7 @@
 from utils import data_to_list, create_generators
 from sklearn.model_selection import train_test_split
 from keras.callbacks import EarlyStopping
-from Models import custom_model, mobilenet_model, vgg_model, efficientnet_model, xception_model
+from Models import custom_model, mobilenet_model, vgg_model, efficientnet_model, xception_model, efficientnetV2_model
 import matplotlib.pyplot as plt
 import os
 import argparse
@@ -22,7 +22,10 @@ ap.add_argument("--model", type=str,  default='mobilenetV2',
                     'mobilenetV2', 'mobilenetV3Small', 'mobilenetV3Large',
                     'efficientnetB0', 'efficientnetB1', 'efficientnetB2',
                     'efficientnetB3', 'efficientnetB4', 'efficientnetB5',
-                    'efficientnetB6', 'efficientnetB7', 'xception'
+                    'efficientnetB6', 'efficientnetB7', 'xception',
+                    'efficientnetV2B0', 'efficientnetV2B1', 'efficientnetV2B2',
+                    'efficientnetV2B3', 'efficientnetV2S', 'efficientnetV2M',
+                    'efficientnetV2L'
                 ],
                 help="select model type custom or mobilenetV2,..etc")
 ap.add_argument("--model_save", type=str, required=True,
@@ -68,6 +71,14 @@ if os.path.isfile(model_path) is False:
     # img_size for Xception Model
     if model_type == 'xception':
         img_size = 299
+
+    # img_size for EfficientNetV2
+    if model_type == 'efficientnetV2B0' or model_type == 'efficientnetV2B1' or\
+        model_type == 'efficientnetV2B2' or model_type == 'efficientnetV2B3' or\
+        model_type == 'efficientnetV2S' or model_type == 'efficientnetV2M' or \
+        model_type == 'efficientnetV2L':
+        img_size = 224
+
 
     print(f'[INFO] {model_type} Model Expected input size {img_size, img_size, 3}\n')
     print(f'[INFO] So Taking Input Size as {img_size, img_size, 3}')
@@ -123,12 +134,19 @@ if os.path.isfile(model_path) is False:
     elif model_type == 'xception':
         model = xception_model(num_class)
 
+    # EfficientNetV2
+    elif model_type == 'efficientnetV2B0' or model_type == 'efficientnetV2B1' or\
+        model_type == 'efficientnetV2B2' or model_type == 'efficientnetV2B3' or\
+        model_type == 'efficientnetV2S' or model_type == 'efficientnetV2M' or \
+        model_type == 'efficientnetV2L':
+        model = efficientnetV2_model(num_class, model_type)
+
     # Model Summary
-    print(f'[INFO] {model_type} Model Summary:\n')
+    print(f'[INFO] {model_type} Model Summary:')
     print(model.summary())
     
     # Model Training
-    print('[INFO] Model Training Started...')
+    print(f'[INFO] {model_type} Model Training Started...')
     model.compile(
         optimizer='adam',
         loss='categorical_crossentropy',

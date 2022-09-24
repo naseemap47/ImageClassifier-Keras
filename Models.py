@@ -152,3 +152,46 @@ def xception_model(no_class):
 
     return Model(inputs=my_input, outputs=x)
 
+
+def efficientnetV2_model(no_class, model_type):
+    
+    # EfficientNetV2B0
+    if model_type == 'efficientnetV2B0':
+        model = tf.keras.applications.EfficientNetV2B0()
+
+    # EfficientNetV2B1
+    elif model_type == 'efficientnetV2B1':
+        model = tf.keras.applications.EfficientNetV2B1()
+
+    # EfficientNetV2B2
+    elif model_type == 'efficientnetV2B2':
+        model = tf.keras.applications.EfficientNetV2B2()
+    
+    # EfficientNetV2B3
+    elif model_type == 'efficientnetV2B3':
+        model = tf.keras.applications.EfficientNetV2B3()
+
+    # EfficientNetV2S
+    elif model_type == 'efficientnetV2S':
+        model = tf.keras.applications.EfficientNetV2S()
+
+    # EfficientNetV2M
+    elif model_type == 'efficientnetV2M':
+        model = tf.keras.applications.EfficientNetV2M()
+
+    # EfficientNetV2L
+    elif model_type == 'efficientnetV2L':
+        model = tf.keras.applications.EfficientNetV2L()
+
+    # Input Layer
+    my_input = model.layers[0].input
+
+    # Changes to our classe number (Our Need)
+    output = model.layers[-2].output
+
+    x = layers.Dense(1024)(output)
+    x = layers.Activation('relu')(x)
+    x = layers.Dense(no_class, activation='softmax')(x)
+
+    return Model(inputs=my_input, outputs=x)
+
