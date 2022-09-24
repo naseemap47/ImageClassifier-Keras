@@ -1,7 +1,8 @@
 from utils import data_to_list, create_generators
 from sklearn.model_selection import train_test_split
 from keras.callbacks import EarlyStopping
-from Models import custom_model, mobilenet_model, vgg_model, efficientnet_model, xception_model, efficientnetV2_model
+from Models import custom_model, mobilenet_model, vgg_model, efficientnet_model, \
+    xception_model, efficientnetV2_model
 import matplotlib.pyplot as plt
 import os
 import argparse
@@ -72,7 +73,7 @@ if os.path.isfile(model_path) is False:
     if model_type == 'xception':
         img_size = 299
 
-    # img_size for EfficientNetV2
+    # img_size for EfficientNetV2 B0 to B3 and S, M, L
     if model_type == 'efficientnetV2B0' or model_type == 'efficientnetV2B1' or\
         model_type == 'efficientnetV2B2' or model_type == 'efficientnetV2B3' or\
         model_type == 'efficientnetV2S' or model_type == 'efficientnetV2M' or \
@@ -123,7 +124,7 @@ if os.path.isfile(model_path) is False:
         model_type == 'mobilenetV3Small' or model_type == 'mobilenetV3Large':
         model = mobilenet_model(num_class, model_type)
 
-    # EfficientNet
+    # EfficientNet B0 - B7
     elif model_type == 'efficientnetB0' or model_type == 'efficientnetB1' or \
         model_type == 'efficientnetB2' or model_type == 'efficientnetB3' or \
         model_type == 'efficientnetB4' or model_type == 'efficientnetB5' or \
@@ -134,7 +135,7 @@ if os.path.isfile(model_path) is False:
     elif model_type == 'xception':
         model = xception_model(num_class)
 
-    # EfficientNetV2
+    # EfficientNetV2 B0 to B3 and S, M, L
     elif model_type == 'efficientnetV2B0' or model_type == 'efficientnetV2B1' or\
         model_type == 'efficientnetV2B2' or model_type == 'efficientnetV2B3' or\
         model_type == 'efficientnetV2S' or model_type == 'efficientnetV2M' or \
