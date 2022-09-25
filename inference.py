@@ -104,17 +104,17 @@ class_names = f.read().splitlines()
 if source.endswith(('.jpg', '.jpeg', '.png')):
     path_to_img = source
     img_og = cv2.imread(path_to_img)
-    img_rgb = cv2.cvtColor(img_og, cv2.COLOR_BGR2RGB)
+    img_resize = cv2.resize(img_og, (img_size, img_size))
     h, w, _ = img_og.shape
-    img_resize = cv2.resize(img_rgb, (img_size, img_size))
+    img_rgb = cv2.cvtColor(img_resize, cv2.COLOR_BGR2RGB)
 
     # Custom Model
     if model_type == 'custom':
-        img = img_resize.astype('float32') / 255
+        img = img_rgb.astype('float32') / 255
         img = tf.keras.preprocessing.image.img_to_array(img)
         img = np.expand_dims(img, axis=0)
     else:
-        img = tf.keras.preprocessing.image.img_to_array(img_resize)
+        img = tf.keras.preprocessing.image.img_to_array(img_rgb)
         img = np.expand_dims(img, axis=0)
         # VGG16
         if model_type == 'vgg16':
@@ -224,17 +224,17 @@ else:
         if not success:
             print('[ERROR] Failed to Read Video feed')
             break
-        img_rgb = cv2.cvtColor(img_og, cv2.COLOR_BGR2RGB)
+        img_resize = cv2.resize(img_og, (img_size, img_size))
         h, w, _ = img_og.shape
-        img_resize = cv2.resize(img_rgb, (img_size, img_size))
+        img_rgb = cv2.cvtColor(img_resize, cv2.COLOR_BGR2RGB)
 
         # Custom Model
         if model_type == 'custom':
-            img = img_resize.astype('float32') / 255
+            img = img_rgb.astype('float32') / 255
             img = tf.keras.preprocessing.image.img_to_array(img)
             img = np.expand_dims(img, axis=0)
         else:
-            img = tf.keras.preprocessing.image.img_to_array(img_resize)
+            img = tf.keras.preprocessing.image.img_to_array(img_rgb)
             img = np.expand_dims(img, axis=0)
             # VGG16
             if model_type == 'vgg16':
