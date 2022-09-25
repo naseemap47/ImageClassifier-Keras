@@ -105,6 +105,27 @@ def create_generators(batch_size, no_class,
             preprocessing_function=tf.keras.applications.efficientnet.preprocess_input
         )
 
+    # Xception
+    elif model_type == 'xception':
+        train_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.xception.preprocess_input,
+        )
+        val_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.xception.preprocess_input
+        )
+
+    # EfficientNetV2
+    elif model_type == 'efficientnetV2B0' or model_type == 'efficientnetV2B1' or\
+        model_type == 'efficientnetV2B2' or model_type == 'efficientnetV2B3' or\
+        model_type == 'efficientnetV2S' or model_type == 'efficientnetV2M' or \
+        model_type == 'efficientnetV2L':
+        train_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.efficientnet_v2.preprocess_input,
+        )
+        val_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.efficientnet_v2.preprocess_input
+        )
+
 
     train_generators = train_preprocessor.flow(
         x_train, y_train,

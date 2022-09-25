@@ -17,7 +17,10 @@ ap.add_argument("--model_type", type=str,  default='mobilenetV2',
                     'mobilenetV2', 'mobilenetV3Small', 'mobilenetV3Large',
                     'efficientnetB0', 'efficientnetB1', 'efficientnetB2',
                     'efficientnetB3', 'efficientnetB4', 'efficientnetB5',
-                    'efficientnetB6', 'efficientnetB7'
+                    'efficientnetB6', 'efficientnetB7', 'xception',
+                    'efficientnetV2B0', 'efficientnetV2B1', 'efficientnetV2B2',
+                    'efficientnetV2B3', 'efficientnetV2S', 'efficientnetV2M',
+                    'efficientnetV2L'
                 ],
                 help="select model type custom or mobilenetV2,vgg16..etc")
 ap.add_argument("-c", "--conf", type=float, required=True,
@@ -42,29 +45,52 @@ if model_type == 'vgg16' or model_type == 'vgg19':
     img_size = 224
 
 # If selected Model is MobileNet
-if model_type == 'mobilenet' or model_type == 'mobilenetV2' or \
+elif model_type == 'mobilenet' or model_type == 'mobilenetV2' or \
     model_type == 'mobilenetV3Small' or model_type == 'mobilenetV3Large':
     img_size = 224
 
 # If selected Model is EfficientNet
-if model_type == 'efficientnetB0':
+elif model_type == 'efficientnetB0':
     img_size = 224
-if model_type == 'efficientnetB1':
+elif model_type == 'efficientnetB1':
     img_size = 240
-if model_type == 'efficientnetB2':
+elif model_type == 'efficientnetB2':
     img_size = 260
-if model_type == 'efficientnetB3':
+elif model_type == 'efficientnetB3':
     img_size = 300
-if model_type == 'efficientnetB4':
+elif model_type == 'efficientnetB4':
     img_size = 380
-if model_type == 'efficientnetB5':
+elif model_type == 'efficientnetB5':
     img_size = 456
-if model_type == 'efficientnetB6':
+elif model_type == 'efficientnetB6':
     img_size = 528
-if model_type == 'efficientnetB7':
+elif model_type == 'efficientnetB7':
     img_size = 600
 
-print(f'[INFO] {model_type} Model Expected input size {img_size, img_size, 3}\n')
+# img_size for Xception Model
+elif model_type == 'xception':
+    img_size = 299
+
+# EfficientNetV2 B0 to B3 and S, M, L
+elif model_type == 'efficientnetV2B0':
+    img_size = 224
+
+elif model_type == 'efficientnetV2B1':
+    img_size = 240
+
+elif model_type == 'efficientnetV2B2':
+    img_size = 260
+
+elif model_type == 'efficientnetV2B3':
+    img_size = 300
+
+elif model_type == 'efficientnetV2S':
+    img_size = 384
+
+elif model_type == 'efficientnetV2M' or model_type == 'efficientnetV2L':
+    img_size = 480
+
+print(f'[INFO] {model_type} Model Expected input size {img_size, img_size, 3}')
 print(f'[INFO] So Taking Input Size as {img_size, img_size, 3}')
 
 ##############################
@@ -78,17 +104,17 @@ class_names = f.read().splitlines()
 if source.endswith(('.jpg', '.jpeg', '.png')):
     path_to_img = source
     img_og = cv2.imread(path_to_img)
-    img_rgb = cv2.cvtColor(img_og, cv2.COLOR_BGR2RGB)
+    img_resize = cv2.resize(img_og, (img_size, img_size))
     h, w, _ = img_og.shape
-    img_resize = cv2.resize(img_rgb, (img_size, img_size))
+    img_rgb = cv2.cvtColor(img_resize, cv2.COLOR_BGR2RGB)
 
     # Custom Model
     if model_type == 'custom':
-        img = img_resize.astype('float32') / 255
+        img = img_rgb.astype('float32') / 255
         img = tf.keras.preprocessing.image.img_to_array(img)
         img = np.expand_dims(img, axis=0)
     else:
-        img = tf.keras.preprocessing.image.img_to_array(img_resize)
+        img = tf.keras.preprocessing.image.img_to_array(img_rgb)
         img = np.expand_dims(img, axis=0)
         # VGG16
         if model_type == 'vgg16':
@@ -112,10 +138,21 @@ if source.endswith(('.jpg', '.jpeg', '.png')):
 
         # EfficientNet B0 to B7
         elif model_type == 'efficientnetB0' or model_type == 'efficientnetB1' or \
-        model_type == 'efficientnetB2' or model_type == 'efficientnetB3' or \
-        model_type == 'efficientnetB4' or model_type == 'efficientnetB5' or \
-        model_type == 'efficientnetB6' or model_type == 'efficientnetB7':
+            model_type == 'efficientnetB2' or model_type == 'efficientnetB3' or \
+            model_type == 'efficientnetB4' or model_type == 'efficientnetB5' or \
+            model_type == 'efficientnetB6' or model_type == 'efficientnetB7':
             img = tf.keras.applications.efficientnet.preprocess_input(img)
+
+        # Xception
+        elif model_type == 'xception':
+            img = tf.keras.applications.xception.preprocess_input(img)
+
+        # EfficientNetV2 B0 to B3 and S, M, L
+        elif model_type == 'efficientnetV2B0' or model_type == 'efficientnetV2B1' or\
+            model_type == 'efficientnetV2B2' or model_type == 'efficientnetV2B3' or\
+            model_type == 'efficientnetV2S' or model_type == 'efficientnetV2M' or \
+            model_type == 'efficientnetV2L':
+            img = tf.keras.applications.efficientnet_v2.preprocess_input(img)
 
 
     prediction = saved_model.predict(img)[0]
@@ -187,17 +224,17 @@ else:
         if not success:
             print('[ERROR] Failed to Read Video feed')
             break
-        img_rgb = cv2.cvtColor(img_og, cv2.COLOR_BGR2RGB)
+        img_resize = cv2.resize(img_og, (img_size, img_size))
         h, w, _ = img_og.shape
-        img_resize = cv2.resize(img_rgb, (img_size, img_size))
+        img_rgb = cv2.cvtColor(img_resize, cv2.COLOR_BGR2RGB)
 
         # Custom Model
         if model_type == 'custom':
-            img = img_resize.astype('float32') / 255
+            img = img_rgb.astype('float32') / 255
             img = tf.keras.preprocessing.image.img_to_array(img)
             img = np.expand_dims(img, axis=0)
         else:
-            img = tf.keras.preprocessing.image.img_to_array(img_resize)
+            img = tf.keras.preprocessing.image.img_to_array(img_rgb)
             img = np.expand_dims(img, axis=0)
             # VGG16
             if model_type == 'vgg16':
@@ -221,10 +258,21 @@ else:
 
             # EfficientNet B0 to B7
             elif model_type == 'efficientnetB0' or model_type == 'efficientnetB1' or \
-            model_type == 'efficientnetB2' or model_type == 'efficientnetB3' or \
-            model_type == 'efficientnetB4' or model_type == 'efficientnetB5' or \
-            model_type == 'efficientnetB6' or model_type == 'efficientnetB7':
+                model_type == 'efficientnetB2' or model_type == 'efficientnetB3' or \
+                model_type == 'efficientnetB4' or model_type == 'efficientnetB5' or \
+                model_type == 'efficientnetB6' or model_type == 'efficientnetB7':
                 img = tf.keras.applications.efficientnet.preprocess_input(img)
+
+            # Xception
+            elif model_type == 'xception':
+                img = tf.keras.applications.xception.preprocess_input(img)
+
+            # EfficientNetV2 B0 to B3 and S, M, L
+            elif model_type == 'efficientnetV2B0' or model_type == 'efficientnetV2B1' or\
+                model_type == 'efficientnetV2B2' or model_type == 'efficientnetV2B3' or\
+                model_type == 'efficientnetV2S' or model_type == 'efficientnetV2M' or \
+                model_type == 'efficientnetV2L':
+                img = tf.keras.applications.efficientnet_v2.preprocess_input(img)
                 
 
         # Prediction
