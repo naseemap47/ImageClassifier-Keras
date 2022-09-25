@@ -1,3 +1,4 @@
+from statistics import mode
 from utils import data_to_list, create_generators
 from sklearn.model_selection import train_test_split
 from keras.callbacks import EarlyStopping
@@ -47,38 +48,50 @@ if os.path.isfile(model_path) is False:
         img_size = 224
 
     # If selected Model is MobileNet
-    if model_type == 'mobilenet' or model_type == 'mobilenetV2' or \
+    elif model_type == 'mobilenet' or model_type == 'mobilenetV2' or \
         model_type == 'mobilenetV3Small' or model_type == 'mobilenetV3Large':
         img_size = 224
 
-    # If selected Model is EfficientNet
-    if model_type == 'efficientnetB0':
+    # If selected Model is EfficientNet B0 - B7
+    elif model_type == 'efficientnetB0':
         img_size = 224
-    if model_type == 'efficientnetB1':
+    elif model_type == 'efficientnetB1':
         img_size = 240
-    if model_type == 'efficientnetB2':
+    elif model_type == 'efficientnetB2':
         img_size = 260
-    if model_type == 'efficientnetB3':
+    elif model_type == 'efficientnetB3':
         img_size = 300
-    if model_type == 'efficientnetB4':
+    elif model_type == 'efficientnetB4':
         img_size = 380
-    if model_type == 'efficientnetB5':
+    elif model_type == 'efficientnetB5':
         img_size = 456
-    if model_type == 'efficientnetB6':
+    elif model_type == 'efficientnetB6':
         img_size = 528
-    if model_type == 'efficientnetB7':
+    elif model_type == 'efficientnetB7':
         img_size = 600
 
     # img_size for Xception Model
-    if model_type == 'xception':
+    elif model_type == 'xception':
         img_size = 299
 
     # img_size for EfficientNetV2 B0 to B3 and S, M, L
-    if model_type == 'efficientnetV2B0' or model_type == 'efficientnetV2B1' or\
-        model_type == 'efficientnetV2B2' or model_type == 'efficientnetV2B3' or\
-        model_type == 'efficientnetV2S' or model_type == 'efficientnetV2M' or \
-        model_type == 'efficientnetV2L':
+    elif model_type == 'efficientnetV2B0':
         img_size = 224
+
+    elif model_type == 'efficientnetV2B1':
+        img_size = 240
+
+    elif model_type == 'efficientnetV2B2':
+        img_size = 260
+
+    elif model_type == 'efficientnetV2B3':
+        img_size = 300
+    
+    elif model_type == 'efficientnetV2S':
+        img_size = 384
+
+    elif model_type == 'efficientnetV2M' or model_type == 'efficientnetV2L':
+        img_size = 480
 
 
     print(f'[INFO] {model_type} Model Expected input size {img_size, img_size, 3}\n')
@@ -136,8 +149,8 @@ if os.path.isfile(model_path) is False:
         model = xception_model(num_class)
 
     # EfficientNetV2 B0 to B3 and S, M, L
-    elif model_type == 'efficientnetV2B0' or model_type == 'efficientnetV2B1' or\
-        model_type == 'efficientnetV2B2' or model_type == 'efficientnetV2B3' or\
+    elif model_type == 'efficientnetV2B0' or model_type == 'efficientnetV2B1' or \
+        model_type == 'efficientnetV2B2' or model_type == 'efficientnetV2B3' or \
         model_type == 'efficientnetV2S' or model_type == 'efficientnetV2M' or \
         model_type == 'efficientnetV2L':
         model = efficientnetV2_model(num_class, model_type)

@@ -45,40 +45,52 @@ if model_type == 'vgg16' or model_type == 'vgg19':
     img_size = 224
 
 # If selected Model is MobileNet
-if model_type == 'mobilenet' or model_type == 'mobilenetV2' or \
+elif model_type == 'mobilenet' or model_type == 'mobilenetV2' or \
     model_type == 'mobilenetV3Small' or model_type == 'mobilenetV3Large':
     img_size = 224
 
 # If selected Model is EfficientNet
-if model_type == 'efficientnetB0':
+elif model_type == 'efficientnetB0':
     img_size = 224
-if model_type == 'efficientnetB1':
+elif model_type == 'efficientnetB1':
     img_size = 240
-if model_type == 'efficientnetB2':
+elif model_type == 'efficientnetB2':
     img_size = 260
-if model_type == 'efficientnetB3':
+elif model_type == 'efficientnetB3':
     img_size = 300
-if model_type == 'efficientnetB4':
+elif model_type == 'efficientnetB4':
     img_size = 380
-if model_type == 'efficientnetB5':
+elif model_type == 'efficientnetB5':
     img_size = 456
-if model_type == 'efficientnetB6':
+elif model_type == 'efficientnetB6':
     img_size = 528
-if model_type == 'efficientnetB7':
+elif model_type == 'efficientnetB7':
     img_size = 600
 
 # img_size for Xception Model
-if model_type == 'xception':
+elif model_type == 'xception':
     img_size = 299
 
-# img_size for EfficientNetV2 B0 to B3 and S, M, L
-if model_type == 'efficientnetV2B0' or model_type == 'efficientnetV2B1' or\
-    model_type == 'efficientnetV2B2' or model_type == 'efficientnetV2B3' or\
-    model_type == 'efficientnetV2S' or model_type == 'efficientnetV2M' or \
-    model_type == 'efficientnetV2L':
+# EfficientNetV2 B0 to B3 and S, M, L
+elif model_type == 'efficientnetV2B0':
     img_size = 224
 
-print(f'[INFO] {model_type} Model Expected input size {img_size, img_size, 3}\n')
+elif model_type == 'efficientnetV2B1':
+    img_size = 240
+
+elif model_type == 'efficientnetV2B2':
+    img_size = 260
+
+elif model_type == 'efficientnetV2B3':
+    img_size = 300
+
+elif model_type == 'efficientnetV2S':
+    img_size = 384
+
+elif model_type == 'efficientnetV2M' or model_type == 'efficientnetV2L':
+    img_size = 480
+
+print(f'[INFO] {model_type} Model Expected input size {img_size, img_size, 3}')
 print(f'[INFO] So Taking Input Size as {img_size, img_size, 3}')
 
 ##############################
