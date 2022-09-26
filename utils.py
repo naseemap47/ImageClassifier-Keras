@@ -142,6 +142,22 @@ def create_generators(batch_size, no_class,
             preprocessing_function=tf.keras.applications.resnet_v2.preprocess_input
         )
 
+    # InceptionV3 and InceptionResNetV2
+    elif model_type == 'inceptionV3':
+        train_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.inception_v3.preprocess_input,
+        )
+        val_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.inception_v3.preprocess_input
+        )
+    elif model_type == 'inceptionresnetV2':
+        train_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.inception_resnet_v2.preprocess_input,
+        )
+        val_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.inception_resnet_v2.preprocess_input
+        )
+        
 
     train_generators = train_preprocessor.flow(
         x_train, y_train,

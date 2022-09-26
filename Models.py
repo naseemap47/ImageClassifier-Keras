@@ -39,7 +39,7 @@ def pre_trainied_model(no_class, model_type):
 
     ########## MobileNet ##########
     # MobileNet
-    if model_type == 'mobilenet':
+    elif model_type == 'mobilenet':
         model = tf.keras.applications.MobileNet()
     
     # MobileNet V2
@@ -57,7 +57,7 @@ def pre_trainied_model(no_class, model_type):
 
     ########## EfficientNet ##########
     # EfficientNetB0
-    if model_type == 'efficientnetB0':
+    elif model_type == 'efficientnetB0':
         model = tf.keras.applications.EfficientNetB0()
 
     # EfficientNetB1
@@ -96,7 +96,7 @@ def pre_trainied_model(no_class, model_type):
 
     ########## EfficientNetV2 ##########
      # EfficientNetV2B0
-    if model_type == 'efficientnetV2B0':
+    elif model_type == 'efficientnetV2B0':
         model = tf.keras.applications.EfficientNetV2B0()
 
     # EfficientNetV2B1
@@ -126,7 +126,7 @@ def pre_trainied_model(no_class, model_type):
 
     ########## ResNet - ResNetV2 ##########
     # ResNet50
-    if model_type == 'resnet50':
+    elif model_type == 'resnet50':
         model = tf.keras.applications.ResNet50()
 
     # ResNet101
@@ -148,6 +148,17 @@ def pre_trainied_model(no_class, model_type):
     # ResNet152V2
     elif model_type == 'resnet152V2':
         model = tf.keras.applications.ResNet152V2()
+
+
+    ########## Inception ##########
+    # InceptionV3
+    elif model_type == 'inceptionV3':
+        model = tf.keras.applications.InceptionV3()
+
+    # InceptionResNetV2
+    elif model_type == 'inceptionresnetV2':
+        model = tf.keras.applications.InceptionResNetV2()
+
 
     my_input = model.layers[0].input
 

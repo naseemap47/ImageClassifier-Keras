@@ -27,7 +27,8 @@ ap.add_argument("--model", type=str,  default='mobilenetV2',
                     'efficientnetV2B0', 'efficientnetV2B1', 'efficientnetV2B2',
                     'efficientnetV2B3', 'efficientnetV2S', 'efficientnetV2M',
                     'efficientnetV2L', 'resnet50', 'resnet101', 'resnet152',
-                    'resnet50V2', 'resnet101V2', 'resnet152V2'
+                    'resnet50V2', 'resnet101V2', 'resnet152V2', 'inceptionV3',
+                    'inceptionresnetV2'
                 ],
                 help="select model type custom or mobilenetV2,..etc")
 ap.add_argument("--model_save", type=str, required=True,
@@ -98,8 +99,12 @@ if os.path.isfile(model_path) is False:
         model_type == 'resnet50V2' or model_type == 'resnet101V2' or model_type == 'resnet152V2':
         img_size = 224
 
+    # InceptionV3 and InceptionResNetV2
+    elif model_type == 'inceptionV3' or model_type == 'inceptionresnetV2':
+        img_size = 299
 
-    print(f'[INFO] {model_type} Model Expected input size {img_size, img_size, 3}\n')
+
+    print(f'[INFO] {model_type} Model Expected input size {img_size, img_size, 3}')
     print(f'[INFO] So Taking Input Size as {img_size, img_size, 3}')
 
     # All image data into a single list
