@@ -17,16 +17,20 @@ def data_to_list(path_to_data, img_size):
     for x in range(0, num_class):
         img_list = os.listdir(os.path.join(path_to_data, str(x)))
         for y in img_list:
-            img = cv2.imread(os.path.join(path_to_data, str(x), y))
-            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-            img = cv2.resize(img, (img_size, img_size))
-            images.append(img)
-            class_no.append(x)
+            try:
+                img = cv2.imread(os.path.join(path_to_data, str(x), y))
+                img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+                img = cv2.resize(img, (img_size, img_size))
+                images.append(img)
+                class_no.append(x)
+            except:
+                print(f'[INFO] Failed to Read {os.path.join(path_to_data, str(x), y)} Image')
+                continue
+
         print(f'[INFO] Extracted Class: {class_names[x]}')
     images = np.array(images)
     class_no = np.array(class_no)
     return images, class_no, num_class
-
 
 
 def create_generators(batch_size, no_class,
@@ -124,6 +128,38 @@ def create_generators(batch_size, no_class,
         )
         val_preprocessor = ImageDataGenerator(
             preprocessing_function=tf.keras.applications.efficientnet_v2.preprocess_input
+        )
+
+    # ResNet - ResNetV2 (50, 101, 152)
+    elif model_type == 'resnet50' or model_type == 'resnet101' or model_type == 'resnet152':
+        train_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.resnet.preprocess_input,
+        )
+        val_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.resnet.preprocess_input
+        )
+    elif model_type == 'resnet50V2' or model_type == 'resnet101V2' or model_type == 'resnet152V2':
+        train_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.resnet_v2.preprocess_input,
+        )
+        val_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.resnet_v2.preprocess_input
+        )
+
+    # InceptionV3 and InceptionResNetV2
+    elif model_type == 'inceptionV3':
+        train_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.inception_v3.preprocess_input,
+        )
+        val_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.inception_v3.preprocess_input
+        )
+    elif model_type == 'inceptionresnetV2':
+        train_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.inception_resnet_v2.preprocess_input,
+        )
+        val_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.inception_resnet_v2.preprocess_input
         )
 
 

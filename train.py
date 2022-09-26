@@ -2,8 +2,7 @@ from statistics import mode
 from utils import data_to_list, create_generators
 from sklearn.model_selection import train_test_split
 from keras.callbacks import EarlyStopping
-from Models import custom_model, mobilenet_model, vgg_model, efficientnet_model, \
-    xception_model, efficientnetV2_model
+from Models import custom_model, pre_trainied_model
 import matplotlib.pyplot as plt
 import os
 import argparse
@@ -27,7 +26,9 @@ ap.add_argument("--model", type=str,  default='mobilenetV2',
                     'efficientnetB6', 'efficientnetB7', 'xception',
                     'efficientnetV2B0', 'efficientnetV2B1', 'efficientnetV2B2',
                     'efficientnetV2B3', 'efficientnetV2S', 'efficientnetV2M',
-                    'efficientnetV2L'
+                    'efficientnetV2L', 'resnet50', 'resnet101', 'resnet152',
+                    'resnet50V2', 'resnet101V2', 'resnet152V2', 'inceptionV3',
+                    'inceptionresnetV2'
                 ],
                 help="select model type custom or mobilenetV2,..etc")
 ap.add_argument("--model_save", type=str, required=True,
@@ -93,8 +94,17 @@ if os.path.isfile(model_path) is False:
     elif model_type == 'efficientnetV2M' or model_type == 'efficientnetV2L':
         img_size = 480
 
+    # ResNet - ResNetV2 (50, 101, 152)
+    elif model_type == 'resnet50' or model_type == 'resnet101' or model_type == 'resnet152' or \
+        model_type == 'resnet50V2' or model_type == 'resnet101V2' or model_type == 'resnet152V2':
+        img_size = 224
 
-    print(f'[INFO] {model_type} Model Expected input size {img_size, img_size, 3}\n')
+    # InceptionV3 and InceptionResNetV2
+    elif model_type == 'inceptionV3' or model_type == 'inceptionresnetV2':
+        img_size = 299
+
+
+    print(f'[INFO] {model_type} Model Expected input size {img_size, img_size, 3}')
     print(f'[INFO] So Taking Input Size as {img_size, img_size, 3}')
 
     # All image data into a single list
@@ -128,32 +138,10 @@ if os.path.isfile(model_path) is False:
     # Choose Model
     if model_type == 'custom':
         model = custom_model(num_class, img_size)
-    # VGG
-    elif model_type == 'vgg16' or model_type == 'vgg19':
-        model = vgg_model(num_class, model_type)
     
-    # MobileNet
-    elif model_type == 'mobilenet' or model_type == 'mobilenetV2' or \
-        model_type == 'mobilenetV3Small' or model_type == 'mobilenetV3Large':
-        model = mobilenet_model(num_class, model_type)
-
-    # EfficientNet B0 - B7
-    elif model_type == 'efficientnetB0' or model_type == 'efficientnetB1' or \
-        model_type == 'efficientnetB2' or model_type == 'efficientnetB3' or \
-        model_type == 'efficientnetB4' or model_type == 'efficientnetB5' or \
-        model_type == 'efficientnetB6' or model_type == 'efficientnetB7':
-        model = efficientnet_model(num_class, model_type)
-
-    # Xception
-    elif model_type == 'xception':
-        model = xception_model(num_class)
-
-    # EfficientNetV2 B0 to B3 and S, M, L
-    elif model_type == 'efficientnetV2B0' or model_type == 'efficientnetV2B1' or \
-        model_type == 'efficientnetV2B2' or model_type == 'efficientnetV2B3' or \
-        model_type == 'efficientnetV2S' or model_type == 'efficientnetV2M' or \
-        model_type == 'efficientnetV2L':
-        model = efficientnetV2_model(num_class, model_type)
+    # Pre-trainied Model
+    else:
+        model = pre_trainied_model(num_class, model_type)
 
     # Model Summary
     print(f'[INFO] {model_type} Model Summary:')

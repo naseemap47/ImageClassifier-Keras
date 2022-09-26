@@ -20,7 +20,9 @@ ap.add_argument("--model_type", type=str,  default='mobilenetV2',
                     'efficientnetB6', 'efficientnetB7', 'xception',
                     'efficientnetV2B0', 'efficientnetV2B1', 'efficientnetV2B2',
                     'efficientnetV2B3', 'efficientnetV2S', 'efficientnetV2M',
-                    'efficientnetV2L'
+                    'efficientnetV2L', 'resnet50', 'resnet101', 'resnet152',
+                    'resnet50V2', 'resnet101V2', 'resnet152V2', 'inceptionV3',
+                    'inceptionresnetV2'
                 ],
                 help="select model type custom or mobilenetV2,vgg16..etc")
 ap.add_argument("-c", "--conf", type=float, required=True,
@@ -90,6 +92,16 @@ elif model_type == 'efficientnetV2S':
 elif model_type == 'efficientnetV2M' or model_type == 'efficientnetV2L':
     img_size = 480
 
+# ResNet - ResNetV2 (50, 101, 152)
+elif model_type == 'resnet50' or model_type == 'resnet101' or model_type == 'resnet152' or \
+    model_type == 'resnet50V2' or model_type == 'resnet101V2' or model_type == 'resnet152V2':
+    img_size = 224
+
+# InceptionV3 and InceptionResNetV2
+elif model_type == 'inceptionV3' or model_type == 'inceptionresnetV2':
+    img_size = 299
+
+
 print(f'[INFO] {model_type} Model Expected input size {img_size, img_size, 3}')
 print(f'[INFO] So Taking Input Size as {img_size, img_size, 3}')
 
@@ -153,6 +165,22 @@ if source.endswith(('.jpg', '.jpeg', '.png')):
             model_type == 'efficientnetV2S' or model_type == 'efficientnetV2M' or \
             model_type == 'efficientnetV2L':
             img = tf.keras.applications.efficientnet_v2.preprocess_input(img)
+
+        # ResNet (50, 101, 152)
+        elif model_type == 'resnet50' or model_type == 'resnet101' or model_type == 'resnet152':
+            img = tf.keras.applications.resnet.preprocess_input(img)
+
+        # ResNetV2 (50, 101, 152)
+        elif model_type == 'resnet50V2' or model_type == 'resnet101V2' or model_type == 'resnet152V2':
+            img = tf.keras.applications.resnet_v2.preprocess_input(img)
+
+        # InceptionV3
+        elif model_type == 'inceptionV3':
+            img = tf.keras.applications.inception_v3.preprocess_input(img)
+
+        # InceptionResNetV2
+        elif model_type == 'inceptionresnetV2':
+            img = tf.keras.applications.inception_resnet_v2.preprocess_input(img)
 
 
     prediction = saved_model.predict(img)[0]
@@ -273,7 +301,23 @@ else:
                 model_type == 'efficientnetV2S' or model_type == 'efficientnetV2M' or \
                 model_type == 'efficientnetV2L':
                 img = tf.keras.applications.efficientnet_v2.preprocess_input(img)
-                
+
+            # ResNet (50, 101, 152)
+            elif model_type == 'resnet50' or model_type == 'resnet101' or model_type == 'resnet152':
+                img = tf.keras.applications.resnet.preprocess_input(img)
+
+            # ResNetV2 (50, 101, 152)
+            elif model_type == 'resnet50V2' or model_type == 'resnet101V2' or model_type == 'resnet152V2':
+                img = tf.keras.applications.resnet_v2.preprocess_input(img)
+
+            # InceptionV3
+            elif model_type == 'inceptionV3':
+                img = tf.keras.applications.inception_v3.preprocess_input(img)
+
+            # InceptionResNetV2
+            elif model_type == 'inceptionresnetV2':
+                img = tf.keras.applications.inception_resnet_v2.preprocess_input(img)
+
 
         # Prediction
         prediction = saved_model.predict(img)[0]

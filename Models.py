@@ -25,10 +25,9 @@ def custom_model(no_classes, img_size):
     return Model(inputs=my_input, outputs=x)
 
 
-########## VGG ##########
-
-def vgg_model(no_class, model_type):
-
+def pre_trainied_model(no_class, model_type):
+    
+    ########## VGG ##########
     # VGG16
     if model_type == 'vgg16':
         model = tf.keras.applications.VGG16()
@@ -37,26 +36,10 @@ def vgg_model(no_class, model_type):
     elif model_type == 'vgg19':
         model = tf.keras.applications.VGG19()
 
-    # default input size is 224 x 224
-    my_input = model.layers[0].input
 
-    # Removing last layer in pre-trained model (it's for 1000 classes)
-    # Changes to our classe number (Our Need)
-    output = model.layers[-2].output
-
-    x = layers.Dense(1024)(output)
-    x = layers.Activation('relu')(x)
-    x = layers.Dense(no_class, activation='softmax')(x)
-
-    return Model(inputs=my_input, outputs=x)
-
-
-########## MobileNet ##########
-
-def mobilenet_model(no_class, model_type):
-
+    ########## MobileNet ##########
     # MobileNet
-    if model_type == 'mobilenet':
+    elif model_type == 'mobilenet':
         model = tf.keras.applications.MobileNet()
     
     # MobileNet V2
@@ -71,25 +54,10 @@ def mobilenet_model(no_class, model_type):
     elif model_type == 'mobilenetV3Large':
         model = tf.keras.applications.MobileNetV3Large()
 
-    # Input Size = 224 x 224 (pr
-    my_input = model.layers[0].input
 
-    # Changes to our classe number (Our Need)
-    output = model.layers[-2].output
-
-    x = layers.Dense(1024)(output)
-    x = layers.Activation('relu')(x)
-    x = layers.Dense(no_class, activation='softmax')(x)
-
-    return Model(inputs=my_input, outputs=x)
-
-
-########## EfficientNet ##########
-
-def efficientnet_model(no_class, model_type):
-    
+    ########## EfficientNet ##########
     # EfficientNetB0
-    if model_type == 'efficientnetB0':
+    elif model_type == 'efficientnetB0':
         model = tf.keras.applications.EfficientNetB0()
 
     # EfficientNetB1
@@ -120,43 +88,15 @@ def efficientnet_model(no_class, model_type):
     elif model_type == 'efficientnetB7':
         model = tf.keras.applications.EfficientNetB7()
 
-    # Input Layer
-    my_input = model.layers[0].input
 
-    # Changes to our classe number (Our Need)
-    output = model.layers[-2].output
-
-    x = layers.Dense(1024)(output)
-    x = layers.Activation('relu')(x)
-    x = layers.Dense(no_class, activation='softmax')(x)
-
-    return Model(inputs=my_input, outputs=x)
+    ########## Xception ##########
+    elif model_type == 'xception':
+        model = tf.keras.applications.Xception()
 
 
-#### Xception ####
-
-def xception_model(no_class):
-
-    # Xception
-    model = tf.keras.applications.Xception()
-
-    # Input Size = 299 x 299 (pre-Trained model)
-    my_input = model.layers[0].input
-
-    # Changes to our classe number (Our Need)
-    output = model.layers[-2].output
-
-    x = layers.Dense(1024)(output)
-    x = layers.Activation('relu')(x)
-    x = layers.Dense(no_class, activation='softmax')(x)
-
-    return Model(inputs=my_input, outputs=x)
-
-
-def efficientnetV2_model(no_class, model_type):
-    
-    # EfficientNetV2B0
-    if model_type == 'efficientnetV2B0':
+    ########## EfficientNetV2 ##########
+     # EfficientNetV2B0
+    elif model_type == 'efficientnetV2B0':
         model = tf.keras.applications.EfficientNetV2B0()
 
     # EfficientNetV2B1
@@ -183,9 +123,46 @@ def efficientnetV2_model(no_class, model_type):
     elif model_type == 'efficientnetV2L':
         model = tf.keras.applications.EfficientNetV2L()
 
-    # Input Layer
+
+    ########## ResNet - ResNetV2 ##########
+    # ResNet50
+    elif model_type == 'resnet50':
+        model = tf.keras.applications.ResNet50()
+
+    # ResNet101
+    elif model_type == 'resnet101':
+        model = tf.keras.applications.ResNet101()
+
+    # ResNet152
+    elif model_type == 'resnet152':
+        model = tf.keras.applications.ResNet152()
+    
+    # ResNet50V2
+    elif model_type == 'resnet50V2':
+        model = tf.keras.applications.ResNet50V2()
+
+    # ResNet101V2
+    elif model_type == 'resnet101V2':
+        model = tf.keras.applications.ResNet101V2()
+
+    # ResNet152V2
+    elif model_type == 'resnet152V2':
+        model = tf.keras.applications.ResNet152V2()
+
+
+    ########## Inception ##########
+    # InceptionV3
+    elif model_type == 'inceptionV3':
+        model = tf.keras.applications.InceptionV3()
+
+    # InceptionResNetV2
+    elif model_type == 'inceptionresnetV2':
+        model = tf.keras.applications.InceptionResNetV2()
+
+
     my_input = model.layers[0].input
 
+    # Removing last layer in pre-trained model (it's for 1000 classes)
     # Changes to our classe number (Our Need)
     output = model.layers[-2].output
 
@@ -194,4 +171,3 @@ def efficientnetV2_model(no_class, model_type):
     x = layers.Dense(no_class, activation='softmax')(x)
 
     return Model(inputs=my_input, outputs=x)
-
