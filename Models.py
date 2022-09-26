@@ -219,7 +219,7 @@ def resnet_model(no_class, model_type):
         model = tf.keras.applications.ResNet101V2()
 
     # ResNet152V2
-    elif model_type == 'ResNet152V2':
+    elif model_type == 'resnet152V2':
         model = tf.keras.applications.ResNet152V2()
 
     # Input Layer
