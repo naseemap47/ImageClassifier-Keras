@@ -206,8 +206,8 @@ if os.path.isfile(model_path) is False:
     plt.legend(['loss', 'val_loss', 'accuracy', 'val_accuracy'])
 
     # Save Model Metrics Plot
-    path_to_metrics = f'{model_type}_metrics.png'
-    path_save_metrics = os.path.join(model_path, path_to_metrics)
+    metrics_name = f'{model_type}_model_metrics.png'
+    path_save_metrics = os.path.join(model_path, metrics_name)
     plt.savefig(path_save_metrics, bbox_inches='tight')
     print(f'[INFO] Metrics saved as {path_save_metrics}')
 
