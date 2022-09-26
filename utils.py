@@ -126,6 +126,22 @@ def create_generators(batch_size, no_class,
             preprocessing_function=tf.keras.applications.efficientnet_v2.preprocess_input
         )
 
+    # ResNet - ResNetV2 (50, 101, 152)
+    elif model_type == 'resnet50' or model_type == 'resnet101' or model_type == 'resnet152':
+        train_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.resnet.preprocess_input,
+        )
+        val_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.resnet.preprocess_input
+        )
+    elif model_type == 'resnet50V2' or model_type == 'resnet101V2' or model_type == 'resnet152V2':
+        train_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.resnet_v2.preprocess_input,
+        )
+        val_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.resnet_v2.preprocess_input
+        )
+
 
     train_generators = train_preprocessor.flow(
         x_train, y_train,

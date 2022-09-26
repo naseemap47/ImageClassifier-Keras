@@ -3,7 +3,7 @@ from utils import data_to_list, create_generators
 from sklearn.model_selection import train_test_split
 from keras.callbacks import EarlyStopping
 from Models import custom_model, mobilenet_model, vgg_model, efficientnet_model, \
-    xception_model, efficientnetV2_model
+    xception_model, efficientnetV2_model, resnet_model
 import matplotlib.pyplot as plt
 import os
 import argparse
@@ -27,7 +27,8 @@ ap.add_argument("--model", type=str,  default='mobilenetV2',
                     'efficientnetB6', 'efficientnetB7', 'xception',
                     'efficientnetV2B0', 'efficientnetV2B1', 'efficientnetV2B2',
                     'efficientnetV2B3', 'efficientnetV2S', 'efficientnetV2M',
-                    'efficientnetV2L'
+                    'efficientnetV2L', 'resnet50', 'resnet101', 'resnet152',
+                    'resnet50V2', 'resnet101V2', 'resnet152V2'
                 ],
                 help="select model type custom or mobilenetV2,..etc")
 ap.add_argument("--model_save", type=str, required=True,
@@ -93,6 +94,11 @@ if os.path.isfile(model_path) is False:
     elif model_type == 'efficientnetV2M' or model_type == 'efficientnetV2L':
         img_size = 480
 
+    # ResNet - ResNetV2 (50, 101, 152)
+    elif model_type == 'resnet50' or model_type == 'resnet101' or model_type == 'resnet152' or \
+        model_type == 'resnet50V2' or model_type == 'resnet101V2' or model_type == 'resnet152V2':
+        img_size = 224
+
 
     print(f'[INFO] {model_type} Model Expected input size {img_size, img_size, 3}\n')
     print(f'[INFO] So Taking Input Size as {img_size, img_size, 3}')
@@ -154,6 +160,11 @@ if os.path.isfile(model_path) is False:
         model_type == 'efficientnetV2S' or model_type == 'efficientnetV2M' or \
         model_type == 'efficientnetV2L':
         model = efficientnetV2_model(num_class, model_type)
+
+    # ResNet - ResNetV2 (50, 101, 152)
+    elif model_type == 'resnet50' or model_type == 'resnet101' or model_type == 'resnet152' or \
+        model_type == 'resnet50V2' or model_type == 'resnet101V2' or model_type == 'resnet152V2':
+        model = resnet_model(num_class, model_type)
 
     # Model Summary
     print(f'[INFO] {model_type} Model Summary:')

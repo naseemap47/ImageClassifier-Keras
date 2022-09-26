@@ -195,3 +195,42 @@ def efficientnetV2_model(no_class, model_type):
 
     return Model(inputs=my_input, outputs=x)
 
+
+def resnet_model(no_class, model_type):
+    
+    # ResNet50
+    if model_type == 'resnet50':
+        model = tf.keras.applications.ResNet50()
+
+    # ResNet101
+    elif model_type == 'resnet101':
+        model = tf.keras.applications.ResNet101()
+
+    # ResNet152
+    elif model_type == 'resnet152':
+        model = tf.keras.applications.ResNet152()
+    
+    # ResNet50V2
+    elif model_type == 'resnet50V2':
+        model = tf.keras.applications.ResNet50V2()
+
+    # ResNet101V2
+    elif model_type == 'resnet101V2':
+        model = tf.keras.applications.ResNet101V2()
+
+    # ResNet152V2
+    elif model_type == 'ResNet152V2':
+        model = tf.keras.applications.ResNet152V2()
+
+    # Input Layer
+    my_input = model.layers[0].input
+
+    # Changes to our classe number (Our Need)
+    output = model.layers[-2].output
+
+    x = layers.Dense(1024)(output)
+    x = layers.Activation('relu')(x)
+    x = layers.Dense(no_class, activation='softmax')(x)
+
+    return Model(inputs=my_input, outputs=x)
+
