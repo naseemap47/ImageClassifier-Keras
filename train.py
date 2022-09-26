@@ -162,10 +162,24 @@ if os.path.isfile(model_path) is False:
         callbacks=[early_stopping]
     )
     print('[INFO] Model Training Completed...')
+    print('[INFO] Model Evaluation Started...')
 
+    # Evaluate the trained model.
+    model_eval_history = model.evaluate(val_generators)
+
+    # Get the loss and accuracy from model_eval_history.
+    model_eval_loss, model_eval_accuracy = model_eval_history
+    print('Model Evaluation Loss: ', model_eval_loss)
+    print('Model Evaluation Accuracy: ', model_eval_accuracy)
+
+    # Define a useful name for our model to make it easy for us while navigating through multiple saved models.
+    model_file_name = f'{model_type}_model_loss_{model_eval_loss:.3}_acc_{model_eval_accuracy:.3}.h5'
+    model_path = os.path.split(model_path)[0]
+    model_full_path = os.path.join(model_path, model_file_name)
+    
     # Saved Model
-    model.save(model_path)
-    print(f'[INFO] Successfully Saved model in {model_path}')
+    model.save(model_full_path)
+    print(f'[INFO] Successfully Saved model in {model_full_path}')
 
     # Plot History
     metric_loss = history.history['loss']
@@ -192,11 +206,10 @@ if os.path.isfile(model_path) is False:
     plt.legend(['loss', 'val_loss', 'accuracy', 'val_accuracy'])
 
     # Save Model Metrics Plot
-    model_name = os.path.split(model_path)[1]
-    path_to_metrics = os.path.splitext(model_name)[0]
-    path_to_metrics = f'{path_to_metrics}_metrics.png'
-    plt.savefig(path_to_metrics, bbox_inches='tight')
-    print(f'[INFO] Metrics saved as {path_to_metrics}')
+    path_to_metrics = f'{model_type}_metrics.png'
+    path_save_metrics = os.path.join(model_path, path_to_metrics)
+    plt.savefig(path_save_metrics, bbox_inches='tight')
+    print(f'[INFO] Metrics saved as {path_save_metrics}')
 
 else:
     print(f'[INFO] {model_path} is already Exist')
