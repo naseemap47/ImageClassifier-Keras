@@ -1,3 +1,4 @@
+from statistics import mode
 import tensorflow as tf
 from keras import layers
 from keras import Model
@@ -158,6 +159,20 @@ def pre_trainied_model(no_class, model_type):
     # InceptionResNetV2
     elif model_type == 'inceptionresnetV2':
         model = tf.keras.applications.InceptionResNetV2()
+
+
+    ########## DenseNet ##########
+    # DenseNet121
+    elif model_type == 'densenet121':
+        model = tf.keras.applications.DenseNet121()
+    
+    # DenseNet169
+    elif model_type == 'densenet169':
+        model = tf.keras.applications.DenseNet169()
+
+    # DenseNet201
+    elif model_type == 'densenet201':
+        model = tf.keras.applications.DenseNet201()
 
 
     my_input = model.layers[0].input
