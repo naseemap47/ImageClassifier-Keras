@@ -1,4 +1,3 @@
-from statistics import mode
 from utils import data_to_list, create_generators
 from sklearn.model_selection import train_test_split
 from keras.callbacks import EarlyStopping
@@ -28,7 +27,8 @@ ap.add_argument("--model", type=str,  default='mobilenetV2',
                     'efficientnetV2B3', 'efficientnetV2S', 'efficientnetV2M',
                     'efficientnetV2L', 'resnet50', 'resnet101', 'resnet152',
                     'resnet50V2', 'resnet101V2', 'resnet152V2', 'inceptionV3',
-                    'inceptionresnetV2'
+                    'inceptionresnetV2', 'densenet121', 'densenet169', 'densenet201',
+                    'nasnetLarge', 'nasnetMobile'
                 ],
                 help="select model type custom or mobilenetV2,..etc")
 ap.add_argument("--model_save", type=str, required=True,
@@ -102,6 +102,16 @@ if os.path.isfile(model_path) is False:
     # InceptionV3 and InceptionResNetV2
     elif model_type == 'inceptionV3' or model_type == 'inceptionresnetV2':
         img_size = 299
+
+    # DenseNet
+    elif model_type == 'densenet121' or model_type == 'densenet169' or model_type == 'densenet201':
+        img_size = 224
+
+    # NasNetLarge & NasNetMobile
+    elif model_type == 'nasnetLarge':
+        img_size = 331
+    elif model_type == 'nasnetMobile':
+        img_size = 224
 
 
     print(f'[INFO] {model_type} Model Expected input size {img_size, img_size, 3}')

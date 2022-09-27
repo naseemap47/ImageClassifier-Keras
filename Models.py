@@ -160,6 +160,29 @@ def pre_trainied_model(no_class, model_type):
         model = tf.keras.applications.InceptionResNetV2()
 
 
+    ########## DenseNet ##########
+    # DenseNet121
+    elif model_type == 'densenet121':
+        model = tf.keras.applications.DenseNet121()
+    
+    # DenseNet169
+    elif model_type == 'densenet169':
+        model = tf.keras.applications.DenseNet169()
+
+    # DenseNet201
+    elif model_type == 'densenet201':
+        model = tf.keras.applications.DenseNet201()
+
+    ########## NASNet ##########
+    # NasNetLarge
+    elif model_type == 'nasnetLarge':
+        model = tf.keras.applications.NASNetLarge()
+    
+    # NasNetMobile
+    elif model_type == 'nasnetMobile':
+        model = tf.keras.applications.NASNetMobile()
+
+
     my_input = model.layers[0].input
 
     # Removing last layer in pre-trained model (it's for 1000 classes)

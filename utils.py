@@ -162,6 +162,24 @@ def create_generators(batch_size, no_class,
             preprocessing_function=tf.keras.applications.inception_resnet_v2.preprocess_input
         )
 
+    # DenseNet
+    elif model_type == 'densenet121' or model_type == 'densenet169' or model_type == 'densenet201':
+        train_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.densenet.preprocess_input,
+        )
+        val_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.densenet.preprocess_input
+        )
+
+    # NasNetLarge & NasNetMobile
+    elif model_type == 'nasnetLarge' or model_type == 'nasnetMobile':
+        train_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.nasnet.preprocess_input,
+        )
+        val_preprocessor = ImageDataGenerator(
+            preprocessing_function=tf.keras.applications.nasnet.preprocess_input
+        )
+
 
     train_generators = train_preprocessor.flow(
         x_train, y_train,

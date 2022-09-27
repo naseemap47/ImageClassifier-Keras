@@ -22,7 +22,8 @@ ap.add_argument("--model_type", type=str,  default='mobilenetV2',
                     'efficientnetV2B3', 'efficientnetV2S', 'efficientnetV2M',
                     'efficientnetV2L', 'resnet50', 'resnet101', 'resnet152',
                     'resnet50V2', 'resnet101V2', 'resnet152V2', 'inceptionV3',
-                    'inceptionresnetV2'
+                    'inceptionresnetV2', 'densenet121', 'densenet169', 'densenet201',
+                    'nasnetLarge', 'nasnetMobile'
                 ],
                 help="select model type custom or mobilenetV2,vgg16..etc")
 ap.add_argument("-c", "--conf", type=float, required=True,
@@ -100,6 +101,16 @@ elif model_type == 'resnet50' or model_type == 'resnet101' or model_type == 'res
 # InceptionV3 and InceptionResNetV2
 elif model_type == 'inceptionV3' or model_type == 'inceptionresnetV2':
     img_size = 299
+
+# DenseNet
+elif model_type == 'densenet121' or model_type == 'densenet169' or model_type == 'densenet201':
+    img_size = 224
+
+# NasNetLarge & NasNetMobile
+elif model_type == 'nasnetLarge':
+    img_size = 331
+elif model_type == 'nasnetMobile':
+    img_size = 224
 
 
 print(f'[INFO] {model_type} Model Expected input size {img_size, img_size, 3}')
@@ -181,6 +192,14 @@ if source.endswith(('.jpg', '.jpeg', '.png')):
         # InceptionResNetV2
         elif model_type == 'inceptionresnetV2':
             img = tf.keras.applications.inception_resnet_v2.preprocess_input(img)
+
+        # DenseNet
+        elif model_type == 'densenet121' or model_type == 'densenet169' or model_type == 'densenet201':
+            img = tf.keras.applications.densenet.preprocess_input(img)
+
+        # NasNetLarge & NasNetMobile
+        elif model_type == 'nasnetLarge' or model_type == 'nasnetMobile':
+            img = tf.keras.applications.nasnet.preprocess_input(img)
 
 
     prediction = saved_model.predict(img)[0]
@@ -317,6 +336,15 @@ else:
             # InceptionResNetV2
             elif model_type == 'inceptionresnetV2':
                 img = tf.keras.applications.inception_resnet_v2.preprocess_input(img)
+
+            # DenseNet
+            elif model_type == 'densenet121' or model_type == 'densenet169' or \
+                model_type == 'densenet201':
+                img = tf.keras.applications.densenet.preprocess_input(img)
+
+            # NasNetLarge & NasNetMobile
+            elif model_type == 'nasnetLarge' or model_type == 'nasnetMobile':
+                img = tf.keras.applications.nasnet.preprocess_input(img)
 
 
         # Prediction
