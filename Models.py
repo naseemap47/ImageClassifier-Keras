@@ -1,4 +1,3 @@
-from statistics import mode
 import tensorflow as tf
 from keras import layers
 from keras import Model
@@ -173,6 +172,15 @@ def pre_trainied_model(no_class, model_type):
     # DenseNet201
     elif model_type == 'densenet201':
         model = tf.keras.applications.DenseNet201()
+
+    ########## NASNet ##########
+    # NasNetLarge
+    elif model_type == 'nasnetLarge':
+        model = tf.keras.applications.NASNetLarge()
+    
+    # NasNetMobile
+    elif model_type == 'nasnetMobile':
+        model = tf.keras.applications.NASNetMobile()
 
 
     my_input = model.layers[0].input
