@@ -105,7 +105,7 @@ if os.path.isfile(model_path) is False:
 
     # DenseNet
     elif model_type == 'densenet121' or model_type == 'densenet169' or model_type == 'densenet201':
-        img_size == 224
+        img_size = 224
 
 
     print(f'[INFO] {model_type} Model Expected input size {img_size, img_size, 3}')
