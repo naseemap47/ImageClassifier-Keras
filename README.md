@@ -56,6 +56,10 @@ You have 2 Options:
 - Train on **Pre-Trained Model**
 
 ### 1. Train on your own Custom Model
+
+Open **Models.py**: <br>
+Edit **custom_model** function to your own **Custom Model** Function.
+
 `-i`, `--dataset`: path to dataset/dir <br>
 `-s`, `--img_size`: Size of Image used to train the model <br>
 `-b`, `--batch_size`: batch size of model training <br>
@@ -67,10 +71,18 @@ You have 2 Options:
 
 **Example:**
 ```
-python3 train.py --dataset Data/ --img_size 32 --batch_size 16 --epochs 50 --model custom --model_save model.h5
+python3 train.py --dataset Data/ --img_size 32 --batch_size 16 \
+                 --epochs 50 --model custom --model_save model.h5
 ```
 
 ### 2. Train on Pre-Trained Model
+
+#### 🗒️ Note:<br>
+
+I added a **Dense Layer** on last Layer in the Pre-Trained Model, with size **1024**. You can edit that layer, If necessary.<br>
+**To Edit**:<br>
+Open **Models.py**, go to **Line-192** of **pre_trainied_model** function, there you can find the Dense Layer.
+
 `-i`, `--dataset`: path to dataset/dir <br>
 `-b`, `--batch_size`: batch size of model training <br>
 `-e`, `--epochs`: epochs of model training <br>
@@ -113,7 +125,10 @@ python3 train.py --dataset Data/ --img_size 32 --batch_size 16 --epochs 50 --mod
 
 `--model_save`: path to save model.h5
 
+**Image Size** set automatically with respect to selected Pre-Trained Model
+
 **Example:**
 ```
-python3 train.py --dataset Data/ --batch_size 8 --epochs 80 --model efficientnetB1 --model_save model.h5
+python3 train.py --dataset Data/ --batch_size 8 --epochs 80 \
+                 --model efficientnetB1 --model_save model.h5
 ```
