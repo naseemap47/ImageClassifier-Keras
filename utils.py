@@ -237,7 +237,7 @@ def S3_data_to_list(bucket_name, path_to_data, img_size, region_name):
                 continue
 
             if current_class_name!= class_id:
-                print(f'[INFO] Extract Class: {class_names[class_id]}')
+                print(f'[INFO] Extracting Class: {class_names[class_id]}')
                 current_class_name = class_id
 
     images = np.array(images)
