@@ -8,6 +8,8 @@ import argparse
 
 
 ap = argparse.ArgumentParser()
+ap.add_argument("-n", "--bucket", type=str, required=True,
+                help="S3 Bucket Name")
 ap.add_argument("-i", "--dataset", type=str, required=True,
                 help="path to dataset/dir in S3 Bucket")
 ap.add_argument("-s", "--img_size", type=int, required=False,
@@ -44,6 +46,7 @@ ap.add_argument("--aws_sec_access_key", type=str, required=True,
 
 
 args = vars(ap.parse_args())
+bucket_name = args['bucket']
 path_to_dir = args["dataset"]
 img_size = args['img_size']
 batch_size = args['batch_size']
@@ -136,9 +139,9 @@ if os.path.isfile(model_path) is False:
     print(f'[INFO] So Taking Input Size as {img_size, img_size, 3}')
 
     # All image data into a single list
-    print('[INFO] Image Data Extraction Started...')
-    img_list, class_list, num_class = S3_data_to_list(path_to_dir, img_size, aws_region)
-    print('[INFO] Image Data Extraction Completed...')
+    print('[INFO] Image Data Extraction From S3 Bucket is Started...')
+    img_list, class_list, num_class = S3_data_to_list(bucket_name, path_to_dir, img_size, aws_region)
+    print('[INFO] Image Data Extraction From S3 Bucket is Completed...')
 
     # Split Data
     x_train, x_val, y_train, y_val = train_test_split(
