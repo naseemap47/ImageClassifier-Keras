@@ -222,7 +222,7 @@ def S3_data_to_list(bucket_name, path_to_data, img_size, region_name):
         for obj in page['Contents']:
             img_path = obj['Key']
             folder_name = os.path.split(img_path)[0]
-            class_id = folder_name.split('/')[-1]
+            class_id = int(folder_name.split('/')[-1])
             try:
                 img_obj = bucket.Object(img_path)
                 responce = img_obj.get()
@@ -236,9 +236,9 @@ def S3_data_to_list(bucket_name, path_to_data, img_size, region_name):
                 print(f'[INFO] Failed to Read {img_path} Image')
                 continue
 
-        if current_class_name!= class_id:
-            print(f'[INFO] Extracted Class: {class_names[class_id]}')
-            current_class_name = class_id
+            if current_class_name!= class_id:
+                print(f'[INFO] Extract Class: {class_names[class_id]}')
+                current_class_name = class_id
 
     images = np.array(images)
     class_no = np.array(class_no)
