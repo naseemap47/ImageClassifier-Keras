@@ -2,10 +2,16 @@
 Custom Image Classifier using **Custom model** and **pre-trained models** (like **MobileNet**, **VGG**, **ResNet**, **EfficientNet**,..etc) with help of **Tensorflow** and **Keras**.<br>
 Its a single tool all you needed for your **Image Classification** problems.<br>
 You can **Inference** on Test **Image, Video and Web-cam** using your saved **Custom Model** or **Pre-Trained Model**. **from a Single Line**. <br>
-If you need to **Save** the output **Image or Video**. Just need to put `--save` argument in the Last.
-### Benefits:
+If you need to **Save** the output **Image or Video**. Just need to put `--save` argument in the Last.<br>
+
+Also you can Train Model using Data from **S3 Bucket** - **"Without Downloading"** <br>
+Its same like **Custom** and **Pre-Trained** model Training. <br>
+Only few small changes. You need to give extra 3 Arguments. That's all..
+
+### Features:
 - Option to added your own **Custom Model**
 - Options to added **All Pre-Trained Models** avalable in Keras Applications
+- You can Train your Model using Data from **S3 Bucket** - **"Without Downloading"**
 
 **You can Train or Inference your Data in your Custom Model or in any Pre-Trained Model, "in a single line"**.
 ## Keras Applications
@@ -90,9 +96,10 @@ Example:
 .   .
 ```
 # Model Training
-## You have 2 Options:
+## You have 3 Options:
 - Train on your own **Custom Model**
 - Train on **Pre-Trained Model**
+- Train Model using Data from **S3 Bucket** - **"Without Downloading"**
 
 ### 1. Train on your own Custom Model
 
@@ -171,6 +178,56 @@ Open **Models.py**, go to **Line-192** of **pre_trainied_model** function, there
 ```
 python3 train.py --dataset Data/ --batch_size 8 --epochs 80 \
                  --model efficientnetB1 --model_save model.h5
+```
+## Train Model using Data from S3 Bucket - "Without Downloading"
+
+Its same like **Custom** and **Pre-Trained** model Training.
+Only few small changes. You need to give extra 3 Arguments. That's it..
+
+### 1. Custom Model
+
+`-n`, `--bucket`: S3 Bucket Name <br>
+`-i`, `--dataset`: path to dataset/dir in S3 Bucket <br>
+`-s`, `--img_size`: Size of Image used to train the model <br>
+`-b`, `--batch_size`: Batch Size of Model Training <br>
+`-e`, `--epochs`: Epochs of Model Training <br>
+`--model`: Select Model type custom or mobilenetV2,..etc <br>
+- Custom Model: `custom`
+
+`--model_save`: Path to save model.h5 <br>
+`--aws_region`: AWS Region Name <br>
+`--aws_access_key_id`: AWS Access Key ID <br>
+`--aws_sec_access_key`: AWS Secret Access Key <br>
+
+**Example:**
+```
+python3 trainS3.py --bucket my_bucket --dataset ImageData/Train --img_size 320 \
+                   --batch_size 8 --epochs 100 --model custom \
+                   --model_save model.h5 --aws_region 'ap-south-1' \
+                   --aws_access_key_id 'AKDU74NH7MNO2NFEY5NK' \
+                   --aws_sec_access_key 'JtyTgFFr/34huiHygUGu&hg7UIHisdhsoit7dsHF'
+```
+### 2.Pre-Trained Model
+
+`-n`, `--bucket`: S3 Bucket Name <br>
+`-i`, `--dataset`: path to dataset/dir in S3 Bucket <br>
+`-b`, `--batch_size`: Batch Size of Model Training <br>
+`-e`, `--epochs`: Epochs of Model Training <br>
+`--model`: Select Model type custom or mobilenetV2,..etc <br>
+- All types of pre-trained models given above
+
+`--model_save`: Path to save model.h5 <br>
+`--aws_region`: AWS Region Name <br>
+`--aws_access_key_id`: AWS Access Key ID <br>
+`--aws_sec_access_key`: AWS Secret Access Key <br>
+
+**Example:**
+```
+python3 trainS3.py --bucket my_bucket --dataset ImageData/Train \
+                   --batch_size 8 --epochs 100 --model vgg16 \
+                   --model_save model.h5 --aws_region 'ap-south-1' \
+                   --aws_access_key_id 'AKDU74NH7MNO2NFEY5NK' \
+                   --aws_sec_access_key 'JtyTgFFr/34huiHygUGu&hg7UIHisdhsoit7dsHF'
 ```
 
 # Inference
