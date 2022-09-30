@@ -4,6 +4,8 @@ import tensorflow as tf
 import cv2
 import numpy as np
 import os
+import boto3
+from PIL import Image
 
 
 f = open('classes.txt')
@@ -192,3 +194,53 @@ def create_generators(batch_size, no_class,
         shuffle=False
     )
     return train_generators, val_generators
+
+
+# Take Data from S3 - Without Downloading
+
+def unique(list1):
+    # insert the list to the set
+    list_set = set(list1)
+    # convert the set to the list
+    unique_list = (list(list_set))
+    return unique_list
+        
+
+def S3_data_to_list(bucket_name, path_to_data, img_size, region_name):
+    images = []
+    class_no = []
+    client = boto3.client('s3')
+    paginator = client.get_paginator('list_objects_v2')
+
+    operation_parameters = {'Bucket': f'{bucket_name}',
+                            'Prefix': f'{path_to_data}'}
+    page_iterator = paginator.paginate(**operation_parameters)
+    s3 = boto3.resource('s3', region_name=region_name)
+    bucket = s3.Bucket(bucket_name)
+    current_class_name = -1
+    for page in page_iterator:
+        for obj in page['Contents']:
+            img_path = obj['Key']
+            folder_name = os.path.split(img_path)[0]
+            class_id = int(folder_name.split('/')[-1])
+            try:
+                img_obj = bucket.Object(img_path)
+                responce = img_obj.get()
+                file_stream = responce['Body']
+                img = Image.open(file_stream)
+                img = np.array(img)
+                img = cv2.resize(img, (img_size, img_size))
+                images.append(img)
+                class_no.append(class_id)
+            except:
+                print(f'[INFO] Failed to Read {img_path} Image')
+                continue
+
+            if current_class_name!= class_id:
+                print(f'[INFO] Extracting Class: {class_names[class_id]}')
+                current_class_name = class_id
+
+    images = np.array(images)
+    class_no = np.array(class_no)
+    num_class = len(np.unique(class_no))
+    return images, class_no, num_class
