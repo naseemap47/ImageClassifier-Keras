@@ -143,3 +143,6 @@ output.avi
 
 # Class names
 classes.txt
+
+# MLFow
+mlruns
