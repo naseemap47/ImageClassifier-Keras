@@ -188,15 +188,15 @@ if os.path.isfile(model_path) is False:
             callbacks=[early_stopping]
         )
         print('[INFO] Model Training Completed...')
-        print('[INFO] Model Evaluation Started...')
+        print('[INFO] Model Validation Started...')
 
         # Evaluate the trained model.
         model_eval_history = model.evaluate(val_generators)
 
         # Get the loss and accuracy from model_eval_history.
         model_eval_loss, model_eval_accuracy = model_eval_history
-        print('[INFO] Model Evaluation Loss: ', model_eval_loss)
-        print('[INFO] Model Evaluation Accuracy: ', model_eval_accuracy)
+        print('[INFO] Model Validation Loss: ', model_eval_loss)
+        print('[INFO] Model Validation Accuracy: ', model_eval_accuracy)
 
         # Define a useful name for our model to make it easy for us while navigating through multiple saved models.
         model_file_name = f'{model_type}_model_loss_{model_eval_loss:.3}_acc_{model_eval_accuracy:.3}.h5'
